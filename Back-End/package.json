@@ -1,0 +1,38 @@
+{
+  "name": "backend-controle-de-fluxo-automotivo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaviKandido/Projeto-Controle-de-Fluxo-Automotivo.git"
+  },
+  "keywords": [
+    "Controle",
+    "Fluxo",
+    "Automotivo",
+    "API"
+  ],
+  "author": "Davi Cândido de Almeida",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaviKandido/Projeto-Controle-de-Fluxo-Automotivo/issues"
+  },
+  "homepage": "https://github.com/DaviKandido/Projeto-Controle-de-Fluxo-Automotivo#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "fastest-validator": "^1.19.1",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.2",
+    "nodemon": "^3.1.10",
+    "sequelize": "^6.37.7",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
