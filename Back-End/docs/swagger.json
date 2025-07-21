@@ -1,13 +1,44 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "API - Sistema de Controle de Fluxos",
-    "description": "API para gerenciamento de usuários, equipamentos e fluxos de automóveis.",
-    "version": "1.0.0"
+    "title": "API - Sistema de Controle de Fluxos Veiculares",
+    "description": "API para gerenciamento de usuários, integradores, municípios, equipamentos e fluxos veiculares.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "DNIT",
+      "url": "https://www.gov.br/dnit"
+    }
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000/",
+      "description": "Servidor de desenvolvimento"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Autenticação",
+      "description": "Operações de autenticação"
+    },
+    {
+      "name": "Usuários",
+      "description": "Operações com usuários do sistema"
+    },
+    {
+      "name": "Integradores",
+      "description": "Operações com integradores de equipamentos"
+    },
+    {
+      "name": "Municípios",
+      "description": "Operações com municípios"
+    },
+    {
+      "name": "Equipamentos",
+      "description": "Operações com equipamentos de medição"
+    },
+    {
+      "name": "Fluxos",
+      "description": "Operações com registros de fluxo veicular"
     }
   ],
   "components": {
@@ -19,265 +50,1110 @@
       }
     },
     "schemas": {
-      "User": {
+      "Usuario": {
         "type": "object",
+        "required": ["login", "senha", "nome", "ativo"],
         "properties": {
-          "id": { "type": "integer" },
-          "nome": { "type": "string" },
-          "email": { "type": "string" },
-          "ativo": { "type": "boolean" }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "login": {
+            "type": "string",
+            "maxLength": 30,
+            "example": "admin"
+          },
+          "senha": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "senha123"
+          },
+          "nome": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "Administrador do Sistema"
+          },
+          "ativo": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "Integrador": {
+        "type": "object",
+        "required": ["nome"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "nome": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Integrador XYZ"
+          }
+        }
+      },
+      "Municipio": {
+        "type": "object",
+        "required": ["codigo", "descricao", "uf"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "codigo": {
+            "type": "integer",
+            "example": 3106200
+          },
+          "descricao": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "Belo Horizonte"
+          },
+          "uf": {
+            "type": "string",
+            "enum": [
+              "AC",
+              "AL",
+              "AP",
+              "AM",
+              "BA",
+              "CE",
+              "DF",
+              "ES",
+              "GO",
+              "MA",
+              "MT",
+              "MS",
+              "MG",
+              "PA",
+              "PB",
+              "PR",
+              "PE",
+              "PI",
+              "RJ",
+              "RN",
+              "RS",
+              "RO",
+              "RR",
+              "SC",
+              "SP",
+              "SE",
+              "TO"
+            ],
+            "example": "MG"
+          }
         }
       },
       "Equipamento": {
         "type": "object",
+        "required": [
+          "codigo",
+          "faixa",
+          "tipo",
+          "ativo",
+          "local",
+          "marca",
+          "modelo",
+          "dataAfericao",
+          "lacre",
+          "integradorId",
+          "municipioId"
+        ],
         "properties": {
-          "id": { "type": "integer" },
-          "codigo": { "type": "string" },
-          "faixa": { "type": "integer" },
-          "ativo": { "type": "boolean" },
-          "integradorId": { "type": "integer" }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "codigo": {
+            "type": "string",
+            "maxLength": 11,
+            "example": "EQP001"
+          },
+          "faixa": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 127,
+            "example": 1
+          },
+          "tipo": {
+            "type": "string",
+            "enum": ["CEV", "REV", "CEM"],
+            "example": "CEV"
+          },
+          "ativo": {
+            "type": "boolean",
+            "example": true
+          },
+          "local": {
+            "type": "string",
+            "maxLength": 80,
+            "example": "Rodovia BR-040, km 120"
+          },
+          "marca": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "XYZ Sensores"
+          },
+          "modelo": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "S1000"
+          },
+          "velocidadeLimite": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 80
+          },
+          "dataAfericao": {
+            "type": "string",
+            "format": "date",
+            "example": "2025-01-15"
+          },
+          "lacre": {
+            "type": "string",
+            "maxLength": 20,
+            "example": "L123456"
+          },
+          "dataRegistroInmetro": {
+            "type": "string",
+            "format": "date",
+            "example": "2025-01-10"
+          },
+          "numeroInmetro": {
+            "type": "string",
+            "maxLength": 30,
+            "example": "INM123456789"
+          },
+          "integradorId": {
+            "type": "integer",
+            "example": 1
+          },
+          "municipioId": {
+            "type": "integer",
+            "example": 1
+          }
         }
       },
       "Fluxo": {
         "type": "object",
+        "required": [
+          "seq",
+          "data",
+          "hora",
+          "classVeic",
+          "dataRecebimento",
+          "equipamentoId"
+        ],
         "properties": {
-          "id": { "type": "integer" },
-          "codigoEquipamento": { "type": "string" },
-          "faixaEquipamento": { "type": "integer" },
-          "dataHora": { "type": "string", "format": "date-time" },
-          "placa": { "type": "string" }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "seq": {
+            "type": "integer",
+            "example": 12345
+          },
+          "data": {
+            "type": "string",
+            "format": "date",
+            "example": "2025-07-21"
+          },
+          "hora": {
+            "type": "string",
+            "format": "time",
+            "example": "14:30:00"
+          },
+          "placa": {
+            "type": "string",
+            "maxLength": 7,
+            "example": "ABC1D23"
+          },
+          "velMed": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 85
+          },
+          "tamVeic": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 420
+          },
+          "classVeic": {
+            "type": "string",
+            "maxLength": 3,
+            "example": "3"
+          },
+          "pesoBt": {
+            "type": "integer",
+            "minimum": 0,
+            "example": 3500
+          },
+          "dataRecebimento": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-07-21T14:30:45Z"
+          },
+          "equipamentoId": {
+            "type": "integer",
+            "example": 1
+          }
         }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Mensagem de erro"
+          },
+          "details": {
+            "type": "string",
+            "example": "Detalhes do erro"
+          },
+          "statusCode": {
+            "type": "integer",
+            "example": 400
+          }
+        }
+      }
+    },
+    "parameters": {
+      "idPath": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        },
+        "description": "ID do recurso"
+      },
+      "limitQuery": {
+        "name": "limit",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "default": 30,
+          "maximum": 100
+        },
+        "description": "Limite de resultados retornados"
       }
     }
   },
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
   "paths": {
-    "/users": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Autenticação"],
+        "summary": "Autenticar usuário",
+        "description": "Realiza a autenticação do usuário e retorna um token JWT",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string",
+                    "example": "admin"
+                  },
+                  "senha": {
+                    "type": "string",
+                    "example": "senha123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Autenticação bem-sucedida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios": {
       "get": {
-        "summary": "Listar usuários",
         "tags": ["Usuários"],
+        "summary": "Listar usuários",
         "security": [{ "bearerAuth": [] }],
         "responses": {
-          "200": { "description": "Lista de usuários" }
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Usuario"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
         }
       },
       "post": {
+        "tags": ["Usuários"],
         "summary": "Criar novo usuário",
-        "tags": ["Usuários"],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/User" }
+              "schema": {
+                "$ref": "#/components/schemas/Usuario"
+              }
             }
           }
         },
         "responses": {
-          "201": { "description": "Usuário criado" }
-        }
-      },
-      "put": {
-        "summary": "Atualizar usuário",
-        "tags": ["Usuários"],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/User" }
+          "201": {
+            "description": "Usuário criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuario"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
             }
           }
-        },
-        "responses": {
-          "200": { "description": "Usuário atualizado" }
         }
-      },
-      "delete": {
-        "summary": "Deletar usuário",
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
         "tags": ["Usuários"],
+        "summary": "Obter usuário por ID",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": { "type": "integer" }
+            "$ref": "#/components/parameters/idPath"
           }
         ],
         "responses": {
-          "200": { "description": "Usuário deletado" }
+          "200": {
+            "description": "Usuário encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuario"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Usuários"],
+        "summary": "Atualizar usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Usuario"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usuario"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Usuários"],
+        "summary": "Excluir usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário excluído com sucesso"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
         }
       }
     },
     "/integradores": {
       "get": {
-        "summary": "Listar integradores",
         "tags": ["Integradores"],
+        "summary": "Listar integradores",
         "responses": {
-          "200": { "description": "Lista de integradores" }
+          "200": {
+            "description": "Lista de integradores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Integrador"
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "post": {
+        "tags": ["Integradores"],
         "summary": "Criar integrador",
-        "tags": ["Integradores"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Integrador"
+              }
+            }
+          }
+        },
         "responses": {
-          "201": { "description": "Integrador criado" }
+          "201": {
+            "description": "Integrador criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Integrador"
+                }
+              }
+            }
+          }
         }
-      },
-      "put": {
-        "summary": "Atualizar integrador",
+      }
+    },
+    "/integradores/{id}": {
+      "get": {
         "tags": ["Integradores"],
-        "responses": {
-          "200": { "description": "Integrador atualizado" }
-        }
-      },
-      "delete": {
-        "summary": "Deletar integrador",
-        "tags": ["Integradores"],
+        "summary": "Obter integrador por ID",
         "parameters": [
           {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": { "type": "integer" }
+            "$ref": "#/components/parameters/idPath"
           }
         ],
         "responses": {
-          "200": { "description": "Integrador deletado" }
+          "200": {
+            "description": "Integrador encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Integrador"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Integrador não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Integradores"],
+        "summary": "Atualizar integrador",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Integrador"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Integrador atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Integrador"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Integrador não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Integradores"],
+        "summary": "Excluir integrador",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Integrador excluído com sucesso"
+          },
+          "404": {
+            "description": "Integrador não encontrado"
+          }
         }
       }
     },
     "/municipios": {
       "get": {
-        "summary": "Listar municípios",
         "tags": ["Municípios"],
+        "summary": "Listar municípios",
         "responses": {
-          "200": { "description": "Lista de municípios" }
+          "200": {
+            "description": "Lista de municípios",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Municipio"
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "post": {
+        "tags": ["Municípios"],
         "summary": "Criar município",
-        "tags": ["Municípios"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Municipio"
+              }
+            }
+          }
+        },
         "responses": {
-          "201": { "description": "Município criado" }
+          "201": {
+            "description": "Município criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Municipio"
+                }
+              }
+            }
+          }
         }
-      },
-      "put": {
-        "summary": "Atualizar município",
+      }
+    },
+    "/municipios/{id}": {
+      "get": {
         "tags": ["Municípios"],
-        "responses": {
-          "200": { "description": "Município atualizado" }
-        }
-      },
-      "delete": {
-        "summary": "Deletar município",
-        "tags": ["Municípios"],
+        "summary": "Obter município por ID",
         "parameters": [
           {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": { "type": "integer" }
+            "$ref": "#/components/parameters/idPath"
           }
         ],
         "responses": {
-          "200": { "description": "Município deletado" }
+          "200": {
+            "description": "Município encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Municipio"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Município não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Municípios"],
+        "summary": "Atualizar município",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Municipio"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Município atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Municipio"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Município não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Municípios"],
+        "summary": "Excluir município",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Município excluído com sucesso"
+          },
+          "404": {
+            "description": "Município não encontrado"
+          }
         }
       }
     },
     "/equipamentos": {
       "get": {
-        "summary": "Listar equipamentos",
         "tags": ["Equipamentos"],
+        "summary": "Listar equipamentos",
         "parameters": [
-          { "name": "codigo", "in": "query", "schema": { "type": "string" } },
-          { "name": "faixa", "in": "query", "schema": { "type": "integer" } },
-          { "name": "ativo", "in": "query", "schema": { "type": "boolean" } },
+          {
+            "name": "codigo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por código do equipamento"
+          },
+          {
+            "name": "faixa",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filtrar por faixa do equipamento"
+          },
+          {
+            "name": "ativo",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filtrar por status ativo/inativo"
+          },
           {
             "name": "integrador",
             "in": "query",
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filtrar por ID do integrador"
+          },
+          {
+            "$ref": "#/components/parameters/limitQuery"
           }
         ],
         "responses": {
-          "200": { "description": "Lista de equipamentos" }
+          "200": {
+            "description": "Lista de equipamentos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Equipamento"
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "post": {
+        "tags": ["Equipamentos"],
         "summary": "Criar equipamento",
-        "tags": ["Equipamentos"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Equipamento"
+              }
+            }
+          }
+        },
         "responses": {
-          "201": { "description": "Equipamento criado" }
+          "201": {
+            "description": "Equipamento criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipamento"
+                }
+              }
+            }
+          }
         }
-      },
-      "put": {
-        "summary": "Atualizar equipamento",
+      }
+    },
+    "/equipamentos/{id}": {
+      "get": {
         "tags": ["Equipamentos"],
-        "responses": {
-          "200": { "description": "Equipamento atualizado" }
-        }
-      },
-      "delete": {
-        "summary": "Deletar equipamento",
-        "tags": ["Equipamentos"],
+        "summary": "Obter equipamento por ID",
         "parameters": [
           {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": { "type": "integer" }
+            "$ref": "#/components/parameters/idPath"
           }
         ],
         "responses": {
-          "200": { "description": "Equipamento deletado" }
+          "200": {
+            "description": "Equipamento encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipamento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Equipamento não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Equipamentos"],
+        "summary": "Atualizar equipamento",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Equipamento"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Equipamento atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipamento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Equipamento não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Equipamentos"],
+        "summary": "Excluir equipamento",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Equipamento excluído com sucesso"
+          },
+          "404": {
+            "description": "Equipamento não encontrado"
+          }
         }
       }
     },
     "/fluxos": {
       "get": {
+        "tags": ["Fluxos"],
         "summary": "Listar fluxos",
-        "tags": ["Fluxos"],
-        "parameters": [
-          { "name": "CodEquipamento", "in": "query", "schema": { "type": "string" } },
-          { "name": "faixaEquipamento", "in": "query", "schema": { "type": "integer" } },
-          { "name": "dataInicio", "in": "query", "schema": { "type": "string", "format": "date" } },
-          { "name": "dataFim", "in": "query", "schema": { "type": "string", "format": "date" } },
-          { "name": "HoraInicio", "in": "query", "schema": { "type": "string", "example": "08:00" } },
-          { "name": "HoraFim", "in": "query", "schema": { "type": "string", "example": "18:00" } },
-          { "name": "placa", "in": "query", "schema": { "type": "string" } },
-          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 30 } }
-        ],
-        "responses": {
-          "200": { "description": "Lista de fluxos (máximo de 30)" }
-        }
-      },
-      "post": {
-        "summary": "Registrar novo fluxo",
-        "tags": ["Fluxos"],
-        "responses": {
-          "201": { "description": "Fluxo registrado" }
-        }
-      },
-      "put": {
-        "summary": "Atualizar fluxo",
-        "tags": ["Fluxos"],
-        "responses": {
-          "200": { "description": "Fluxo atualizado" }
-        }
-      },
-      "delete": {
-        "summary": "Deletar fluxo",
-        "tags": ["Fluxos"],
+        "description": "Retorna os registros de fluxo veicular com filtros opcionais. Limite máximo de 30 registros por padrão.",
         "parameters": [
           {
-            "name": "id",
+            "name": "CodEquipamento",
             "in": "query",
-            "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "string"
+            },
+            "description": "Código do equipamento"
+          },
+          {
+            "name": "faixaEquipamento",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Faixa do equipamento"
+          },
+          {
+            "name": "dataInicio",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Data de início (YYYY-MM-DD)"
+          },
+          {
+            "name": "dataFim",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Data de fim (YYYY-MM-DD)"
+          },
+          {
+            "name": "HoraInicio",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9]$"
+            },
+            "description": "Hora de início (HH:MM)"
+          },
+          {
+            "name": "HoraFim",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9]$"
+            },
+            "description": "Hora de fim (HH:MM)"
+          },
+          {
+            "name": "placa",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Placa do veículo"
+          },
+          {
+            "$ref": "#/components/parameters/limitQuery"
           }
         ],
         "responses": {
-          "200": { "description": "Fluxo deletado" }
+          "200": {
+            "description": "Lista de fluxos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Fluxo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Fluxos"],
+        "summary": "Registrar novo fluxo",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fluxo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Fluxo registrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fluxo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fluxos/{id}": {
+      "get": {
+        "tags": ["Fluxos"],
+        "summary": "Obter fluxo por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fluxo encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fluxo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Fluxo não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Fluxos"],
+        "summary": "Atualizar fluxo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Fluxo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Fluxo atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Fluxo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Fluxo não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Fluxos"],
+        "summary": "Excluir fluxo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPath"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Fluxo excluído com sucesso"
+          },
+          "404": {
+            "description": "Fluxo não encontrado"
+          }
         }
       }
     }

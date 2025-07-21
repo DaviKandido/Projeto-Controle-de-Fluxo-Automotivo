@@ -14,9 +14,20 @@ app.use((req, res, next) => {
 
 
 const swaggerRouter = require("./routers/swagger");
+const integradoresRouter = require("./routers/integradores");
+const fluxosRouter = require("./routers/fluxos");
+const municipiosRouter = require("./routers/municipios");
+const equipamentosRouter = require("./routers/equipamentos");
+const usuariosRouter = require("./routers/usuarios");
 
 
-app.use("/api-docs", swaggerRouter)
+app.use("/usuarios", usuariosRouter);
+app.use("/integradores", integradoresRouter);
+app.use("/municipios", municipiosRouter);
+app.use("/equipamentos", equipamentosRouter);
+app.use("/fluxos", fluxosRouter);
+
+app.use("/api-docs", swaggerRouter);
 
 
 

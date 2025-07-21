@@ -1,0 +1,228 @@
+const { where } = require("sequelize");
+const models = require("../models");
+const Validator = require("fastest-validator");
+
+function index(req, res) {
+  let limit = req.query.limit;
+  delete req.query.limit;
+
+  models.equipamento
+    .findAll({ where: { ...req.query } })
+    .then((result) => {
+      if (limit) {
+        result = result.slice(0, limit);
+      }
+
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Não foi possível obter os equipamentos",
+        error: err,
+      });
+    });
+}
+
+function show(req, res) {
+  const id = req.params.id;
+  models.municipio
+    .findByPk(id)
+    .then((result) => {
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({
+          message: "Equipamento não encontrado",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Não foi possível obter o equipamento",
+        error: err,
+      });
+    });
+}
+
+function save(req, res) {
+  const municipio = {
+    codigo: req.body.codigo,
+    descricao: req.body.descricao,
+    uf: req.body.uf,
+  };
+
+  const schema = {
+    codigo: { type: "number", options: false },
+    descricao: { type: "string", options: false, max: "255" },
+    uf: {
+      type: "enum",
+      values: [
+        "AC",
+        "AL",
+        "AP",
+        "AM",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "GO",
+        "MA",
+        "MT",
+        "MS",
+        "MG",
+        "PA",
+        "PB",
+        "PR",
+        "PE",
+        "PI",
+        "RJ",
+        "RN",
+        "RS",
+        "RO",
+        "RR",
+        "SC",
+        "SP",
+        "SE",
+        "TO",
+      ],
+      options: false,
+    },
+  };
+
+  const v = new Validator();
+  const validationResponse = v.validate(municipio, schema);
+
+  if (validationResponse !== true) {
+    return res.status(400).json({
+      message: "falha na validação!",
+      errors: validationResponse,
+    });
+  }
+
+  models.municipio.create(municipio).then((result) => {
+    res
+      .status(201)
+      .json({
+        message: "equipamento criado com sucesso",
+        municipio: {
+          id: result.id,
+          ...municipio,
+        },
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Não foi possível incluir o equipamento",
+          error: err,
+        });
+      });
+  });
+}
+
+function update(req, res) {
+  const id = req.params.id;
+  const municipioUpdate = {
+    codigo: req.body.codigo,
+    descricao: req.body.descricao,
+    uf: req.body.uf,
+  };
+
+  const schema = {
+    codigo: { type: "number", options: false },
+    descricao: { type: "string", options: false, max: "255" },
+    uf: {
+      type: "enum",
+      values: [
+        "AC",
+        "AL",
+        "AP",
+        "AM",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "GO",
+        "MA",
+        "MT",
+        "MS",
+        "MG",
+        "PA",
+        "PB",
+        "PR",
+        "PE",
+        "PI",
+        "RJ",
+        "RN",
+        "RS",
+        "RO",
+        "RR",
+        "SC",
+        "SP",
+        "SE",
+        "TO",
+      ],
+      options: false,
+    },
+  };
+
+  const v = new Validator();
+  const validationResponse = v.validate(municipioUpdate, schema);
+
+  if (validationResponse !== true) {
+    return res.status(400).json({
+      message: "falha na validação!",
+      errors: validationResponse,
+    });
+  }
+
+  models.municipio
+    .update(municipioUpdate, {
+      where: {
+        id: id,
+      },
+    })
+    .then((result) => {
+      res.status(200).json({
+        message: "Equipamento atualizado com sucesso",
+        municipio: {
+          id: id,
+          ...municipioUpdate,
+        },
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Não foi possível atualizar o equipamento",
+        error: err,
+      });
+    });
+}
+
+function destroy(req, res) {
+  const id = req.params.id;
+
+  models.municipio
+    .destroy({
+      where: {
+        id: id,
+      },
+    })
+    .then((result) => {
+      res.status(200).json({
+        message: "Equipamento removido com sucesso",
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Não foi possível remover o equipamento",
+        error: err,
+      });
+    });
+}
+
+module.exports = {
+  index: index,
+  show: show,
+  save: save,
+  update: update,
+  destroy: destroy,
+};
