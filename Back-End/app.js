@@ -30,6 +30,15 @@ app.use("/fluxos", fluxosRouter);
 app.use("/api-docs", swaggerRouter);
 
 
+app.get("/", (req, res) => {
+  res.send("API - Sistema de Controle de Fluxos Veiculares");
+});
+
+app.use((req, res) => {
+  res.status(404).json({
+      message: "Rota não encontrada"
+  });
+});
 
 
 module.exports = app;

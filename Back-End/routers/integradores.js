@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const integradoresController = require("../controllers/integradores.Controller");
+const integradoresController = require("../controllers/integradores.controller");
 
 router.get("/", integradoresController.index);
 

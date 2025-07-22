@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('fluxo', {
+  const Fluxo = sequelize.define('Fluxo', {
     id: {
       autoIncrement: true,
       type: DataTypes.BIGINT,
@@ -53,7 +53,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'fluxo',
+    tableName: 'Fluxo',
     timestamps: false,
     indexes: [
       {
@@ -73,4 +73,8 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+  Fluxo.associate = function(models) {
+    Fluxo.belongsTo(models.Equipamento, { foreignKey: 'equipamentoId' });
+  };
+  return Fluxo;
 };

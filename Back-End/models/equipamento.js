@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('equipamento', {
+  const Equipamento = sequelize.define('Equipamento', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -73,7 +73,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'equipamento',
+    tableName: 'Equipamento',
     timestamps: false,
     indexes: [
       {
@@ -109,4 +109,10 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+  Equipamento.associate = function(models) {
+    Equipamento.belongsTo(models.Integrador, { foreignKey: 'integradorId' });
+    Equipamento.belongsTo(models.Municipio, { foreignKey: 'municipioId' });
+    Equipamento.hasMany(models.Fluxo, { foreignKey: 'equipamentoId' });
+  };
+  return Equipamento;
 };

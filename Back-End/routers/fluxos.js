@@ -5,9 +5,9 @@ router.get("/", fluxosController.index);
 
 router.get("/:id", fluxosController.show);
 
-router.post("/", fluxosController.save);
+// router.post("/", fluxosController.save);
 
-router.put("/:id", fluxosController.update);
+// router.put("/:id", fluxosController.update);
 
 router.delete("/:id", fluxosController.destroy);
 

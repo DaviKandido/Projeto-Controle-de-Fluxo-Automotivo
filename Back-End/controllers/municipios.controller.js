@@ -2,7 +2,7 @@ const models = require("../models");
 const Validator = require("fastest-validator");
 
 function index(req, res) {
-  models.municipio
+  models.Municipio
     .findAll()
     .then((result) => {
       res.status(200).json(result);
@@ -17,7 +17,7 @@ function index(req, res) {
 
 function show(req, res) {
   const id = req.params.id;
-  models.municipio
+  models.Municipio
     .findByPk(id)
     .then((result) => {
       if (result) {
@@ -44,8 +44,8 @@ function save(req, res) {
   };
 
   const schema = {
-    codigo: { type: "number", options: false },
-    descricao: { type: "string", options: false, max: "255" },
+    codigo: { type: "number", optional: false },
+    descricao: { type: "string", optional: false, max: "255" },
     uf: {
       type: "enum",
       values: [
@@ -77,7 +77,7 @@ function save(req, res) {
         "SE",
         "TO",
       ],
-      options: false,
+      optional: false,
     },
   };
 
@@ -91,7 +91,7 @@ function save(req, res) {
     });
   }
 
-  models.municipio.create(municipio).then((result) => {
+  models.Municipio.create(municipio).then((result) => {
     res
       .status(201)
       .json({
@@ -119,8 +119,8 @@ function update(req, res) {
    };
 
    const schema = {
-     codigo: { type: "number", options: false },
-     descricao: { type: "string", options: false, max: "255" },
+     codigo: { type: "number", optional: false },
+     descricao: { type: "string", optional: false, max: "255" },
      uf: {
        type: "enum",
        values: [
@@ -152,7 +152,7 @@ function update(req, res) {
          "SE",
          "TO",
        ],
-       options: false,
+       optional: false,
      },
    };
 
@@ -166,7 +166,7 @@ function update(req, res) {
      });
    }
 
-  models.municipio
+  models.Municipio
     .update(municipioUpdate, {
       where: {
         id: id,
@@ -193,7 +193,7 @@ function update(req, res) {
 function destroy(req, res) {
   const id = req.params.id;
 
-  models.municipio
+  models.Municipio
     .destroy({
       where: {
         id: id,
