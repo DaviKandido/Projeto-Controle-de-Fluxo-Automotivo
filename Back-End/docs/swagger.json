@@ -342,61 +342,6 @@
     }
   },
   "paths": {
-    "/auth/login": {
-      "post": {
-        "tags": ["Autenticação"],
-        "summary": "Autenticar usuário",
-        "description": "Realiza a autenticação do usuário e retorna um token JWT",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "login": {
-                    "type": "string",
-                    "example": "admin"
-                  },
-                  "senha": {
-                    "type": "string",
-                    "example": "senha123"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Autenticação bem-sucedida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Credenciais inválidas",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/usuarios": {
       "get": {
         "tags": ["Usuários"],
@@ -427,9 +372,11 @@
             }
           }
         }
-      },
+      }
+    },
+    "/usuarios/sign-up": {
       "post": {
-        "tags": ["Usuários"],
+        "tags": ["Autenticação"],
         "summary": "Criar novo usuário",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
@@ -449,6 +396,61 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Usuario"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/login": {
+      "post": {
+        "tags": ["Autenticação"],
+        "summary": "Verifica credenciais de login",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string",
+                    "example": "admin"
+                  },
+                  "senha": {
+                    "type": "string",
+                    "example": "senha123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário logado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
                 }
               }
             }
@@ -968,6 +970,7 @@
       "get": {
         "tags": ["Fluxos"],
         "summary": "Listar fluxos",
+        "security": [{ "bearerAuth": [] }],
         "description": "Retorna os registros de fluxo veicular com filtros opcionais. Limite máximo de 30 registros por padrão.",
         "parameters": [
           {
@@ -1060,6 +1063,7 @@
             "$ref": "#/components/parameters/idPath"
           }
         ],
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "Fluxo encontrado",

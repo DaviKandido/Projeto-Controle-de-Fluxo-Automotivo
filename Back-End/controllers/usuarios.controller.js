@@ -1,6 +1,8 @@
 const { optional } = require("../app");
 const models = require("../models");
 const Validator = require("fastest-validator");
+const bcryptJS = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 function index(req, res) {
   models.Usuario.findAll()
@@ -36,48 +38,112 @@ function show(req, res) {
     });
 }
 
-function save(req, res) {
-  const usuario = {
-    login: req.body.login,
-    senha: req.body.senha,
-    nome: req.body.nome,
-    ativo: req.body.ativo,
-  };
+function singUp(req, res) {
 
-  const schema = {
-    nome: { type: "string", optional: false, max: "255" },
-    login: { type: "string", optional: false, max: "255" },
-    senha: { type: "string", optional: false, max: "255" },
-    ativo: { type: "boolean", optional: false },
-  };
-
-  const v = new Validator();
-  const validationResponse = v.validate(usuario, schema);
-
-  if (validationResponse !== true) {
-    return res.status(400).json({
-      message: "falha na validação!",
-      errors: validationResponse,
-    });
-  }
-
-  models.Usuario.create(usuario).then((result) => {
-    res
-      .status(201)
-      .json({
-        message: "Usuario criado com sucesso",
-        usuario: {
-          id: result.id,
-          ...usuario
-        },
-      })
-      .catch((err) => {
-        res.status(500).json({
-          message: "Não foi possível criar o usuario",
-          error: err,
-        });
+  models.Usuario.findOne({
+    where: {
+      login: req.body.login
+    }
+  }).then(result => {
+    if (result) {
+      return res.status(409).json({
+        message: "Já existe um usuário com esse login",
       });
+    }
+  })
+
+
+  bcryptJS.genSalt(10, (err, salt) => {
+    bcryptJS.hash(req.body.senha, salt, (err, hash) => {
+      const usuario = {
+        login: req.body.login,
+        senha: hash,
+        nome: req.body.nome,
+        ativo: req.body.ativo,
+      };
+
+      const schema = {
+        nome: { type: "string", optional: false, max: "255" },
+        login: { type: "string", optional: false, max: "255" },
+        senha: { type: "string", optional: false, max: "255" },
+        ativo: { type: "boolean", optional: false },
+      };
+
+      const v = new Validator();
+      const validationResponse = v.validate(usuario, schema);
+
+      if (validationResponse !== true) {
+        return res.status(400).json({
+          message: "falha na validação!",
+          errors: validationResponse,
+        });
+      }
+
+      models.Usuario.create(usuario).then(result => {
+        res
+          .status(201)
+          .json({
+            message: "Usuario criado com sucesso",
+            usuario: {
+              id: result.id,
+              ...usuario,
+            },
+          })
+          .catch(err => {
+            res.status(500).json({
+              message: "Não foi possível criar o usuario",
+              error: err,
+            });
+          });
+      });
+    });
+  }).catch(err => {
+    res.status(500).json({
+      message: "Não foi possível criar o usuario",
+      error: err,
+    });
   });
+}
+
+function login(req, res) {
+  models.Usuario.findOne({
+    where: {
+      login: req.body.login
+    }
+  }).then(usuario => {
+    if (usuario == null) {
+      res.status(401).json({
+        message: "Credenciais inválidas",
+      });
+    } else {
+      bcryptJS.compare(req.body.senha, usuario.senha, (err, result) => {
+        if (result) {
+          const token = jwt.sign(
+            {
+              id: usuario.id,
+              login: usuario.login,
+            },
+            process.env.JWT_KEY || "secret",
+            (err, token) => {
+              res.status(200).json({
+                message: "Autenticação realizada com sucesso",
+                token: token,
+              });
+            }
+          );
+        }else{
+          res.status(401).json({
+            message: "Credenciais inválidas",
+          });
+        }
+      });
+    }
+  }).catch(err => {
+    res.status(500).json({
+      message: "Não foi possível autenticar o usuário",
+      error: err,
+    });
+  })
 }
 
 function update(req, res) {
@@ -105,7 +171,6 @@ function update(req, res) {
       errors: validationResponse,
     });
   }
-
 
   models.Usuario.update(usuarioUpdate, {
     where: {
@@ -153,7 +218,8 @@ function destroy(req, res) {
 module.exports = {
   index: index,
   show: show,
-  save: save,
+  singUp: singUp,
+  login: login,
   update: update,
   destroy: destroy,
 };

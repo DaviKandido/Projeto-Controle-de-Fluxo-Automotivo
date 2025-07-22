@@ -1,10 +1,9 @@
 const { where } = require("sequelize");
 const models = require("../models");
 const Validator = require("fastest-validator");
-const integrador = require("../models/integrador");
 const { Op } = require("sequelize");
 
-function index(req, res) {
+async function index(req, res) {
   // Extrai e converte o limit, se existir
   const limit = req.query.limit ? parseInt(req.query.limit) : null;
   delete req.query.limit;
@@ -66,18 +65,33 @@ function index(req, res) {
       {
         model: models.Municipio,
       },
-      {
-        model: models.Fluxo,
-        where: {
-          ...whereFluxos,
-        },
-      },
+      // {
+      //   model: models.Fluxo,
+      //   where: {
+      //     ...whereFluxos,
+      //   },
+      // },
     ],
   })
-    .then((result) => {
+    .then( async (result) => {
       if (limit) {
         result = result.slice(0, limit);
       }
+
+    result = await Promise.all(
+      result.map(async (equip) => {
+        const fluxos = await models.Fluxo.findAll({
+          where: {
+            ...whereFluxos,
+            equipamentoId: equip.id,
+          },
+        });
+
+        const obj = equip.get({ plain: true });
+        obj.Fluxos = fluxos.length;
+        return obj;
+      })
+    );
 
       res.status(200).json(result);
     })
