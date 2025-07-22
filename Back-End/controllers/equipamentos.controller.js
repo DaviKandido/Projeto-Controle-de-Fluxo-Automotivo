@@ -1,7 +1,5 @@
-const { where } = require("sequelize");
 const models = require("../models");
 const Validator = require("fastest-validator");
-const { Op } = require("sequelize");
 
 async function index(req, res) {
   // Extrai e converte o limit, se existir
@@ -22,39 +20,7 @@ async function index(req, res) {
 
   const whereFluxos = {};
   if (req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
-  if (req.query.dataInicio && req.query.dataFim) {
-    whereFluxos.data = {
-      [Op.between]: [
-        new Date(req.query.dataInicio),
-        new Date(req.query.dataFim),
-      ],
-    };
-  } else if (req.query.dataInicio) {
-    whereFluxos.data = {
-      [Op.gte]: new Date(req.query.dataInicio),
-    };
-  } else if (req.query.dataFim) {
-    whereFluxos.data = {
-      [Op.lte]: new Date(req.query.dataFim),
-    };
-  }
 
-  if (req.query.horaInicio && req.query.horaFim) {
-    whereFluxos.hora = {
-      [Op.between]: [
-        new Date(`1970-01-01T${req.query.horaInicio}`),
-        new Date(`1970-01-01T${req.query.horaFim}`),
-      ],
-    };
-  } else if (req.query.horaInicio) {
-    whereFluxos.hora = {
-      [Op.gte]: new Date(`1970-01-01T${req.query.horaInicio}`),
-    };
-  } else if (req.query.horaFim) {
-    whereFluxos.hora = {
-      [Op.lte]: new Date(`1970-01-01T${req.query.horaFim}`),
-    };
-  }
 
   models.Equipamento.findAll({
     where: { ...whereEquipamento },
@@ -73,25 +39,50 @@ async function index(req, res) {
       // },
     ],
   })
-    .then( async (result) => {
+    .then(async (result) => {
       if (limit) {
         result = result.slice(0, limit);
       }
 
-    result = await Promise.all(
-      result.map(async (equip) => {
-        const fluxos = await models.Fluxo.findAll({
-          where: {
-            ...whereFluxos,
-            equipamentoId: equip.id,
-          },
-        });
+      result = await Promise.all(
+        result.map(async (equip) => {
+          let fluxos = await models.Fluxo.findAll({
+            where: {
+              ...whereFluxos,
+              equipamentoId: equip.id,
+            },
+          });
 
-        const obj = equip.get({ plain: true });
-        obj.Fluxos = fluxos.length;
-        return obj;
-      })
-    );
+          if (req.query.dataInicio) {
+            fluxos = fluxos.filter(
+              (f) => new Date(f.data) >= new Date(req.query.dataInicio)
+            );
+          }
+          if (req.query.dataFim) {
+            fluxos = fluxos.filter(
+              (f) => new Date(f.data) <= new Date(req.query.dataFim)
+            );
+          }
+          if (req.query.horaInicio) {
+            fluxos = fluxos.filter(
+              (f) =>
+                new Date(`1970-01-01T${f.hora}`) >=
+                new Date(`1970-01-01T${req.query.horaInicio}`)
+            );
+          }
+          if (req.query.horaFim) {
+            fluxos = fluxos.filter(
+              (f) =>
+                new Date(`1970-01-01T${f.hora}`) <=
+                new Date(`1970-01-01T${req.query.horaFim}`)
+            );
+          }
+
+          const obj = equip.get({ plain: true });
+          obj.Fluxos = fluxos.length;
+          return obj;
+        })
+      );
 
       res.status(200).json(result);
     })

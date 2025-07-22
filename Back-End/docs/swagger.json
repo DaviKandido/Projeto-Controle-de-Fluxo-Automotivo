@@ -841,6 +841,50 @@
           },
           {
             "$ref": "#/components/parameters/limitQuery"
+          },
+          {
+            "name": "dataInicio",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Data de início (YYYY-MM-DD)"
+          },
+          {
+            "name": "dataFim",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Data de fim (YYYY-MM-DD)"
+          },
+          {
+            "name": "horaInicio",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9]$"
+            },
+            "description": "Hora de início (HH:MM)"
+          },
+          {
+            "name": "horaFim",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9]$"
+            },
+            "description": "Hora de fim (HH:MM)"
+          },
+          {
+            "name": "placa",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Placa do veículo"
           }
         ],
         "responses": {

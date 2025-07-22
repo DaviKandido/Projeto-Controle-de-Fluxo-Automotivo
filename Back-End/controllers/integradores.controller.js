@@ -1,4 +1,3 @@
-const { optional } = require("../app");
 const models = require("../models");
 const Validator = require("fastest-validator");
 

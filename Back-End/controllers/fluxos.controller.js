@@ -1,6 +1,4 @@
-const { where } = require("sequelize");
 const models = require("../models");
-const Validator = require("fastest-validator");
 
 function index(req, res) {
   // Extrai e converte o limit, se existir
