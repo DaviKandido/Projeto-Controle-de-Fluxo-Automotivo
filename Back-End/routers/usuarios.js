@@ -3,6 +3,7 @@ const usuariosController = require("../controllers/usuarios.controller");
 const checkAuthMiddleware = require("../middleware/check-auth");
 
 
+
 router.get("/", checkAuthMiddleware.checkAuth, usuariosController.index);
 
 router.get("/:id", checkAuthMiddleware.checkAuth, usuariosController.show);
