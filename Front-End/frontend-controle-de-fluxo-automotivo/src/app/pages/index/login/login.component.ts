@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
           }
         },
         (err) => {
-          alert(`Erro ao logar: ${err.message}`);
+          alert(`Erro ao logar: ${err.error.message}`);
         }
       );
     } catch (err) {
