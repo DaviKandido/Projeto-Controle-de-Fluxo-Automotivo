@@ -1,21 +1,43 @@
 const models = require("../models");
+const { Op } = require("sequelize");
 
 function index(req, res) {
   // Extrai e converte o limit, se existir
   const limit = req.query.limit ? parseInt(req.query.limit) : null;
   delete req.query.limit;
 
-
   const whereEquipamento = {};
-  if(req.query.CodEquipamento !== undefined) whereEquipamento.codigo = req.query.CodEquipamento;
-  if(req.query.faixaEquipamento !== undefined) whereEquipamento.faixa = req.query.faixaEquipamento;
+  if (req.query.CodEquipamento !== undefined)
+    whereEquipamento.codigo = req.query.CodEquipamento;
+  if (req.query.faixaEquipamento !== undefined)
+    whereEquipamento.faixa = req.query.faixaEquipamento;
 
   const whereFluxos = {};
-  if(req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
+  if (req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
 
+  if (req.query.dataInicio !== undefined || req.query.dataFim !== undefined) {
+    whereFluxos.data = {};
+    if (req.query.dataInicio !== undefined) {
+      whereFluxos.data[Op.gte] = req.query.dataInicio;
+    }
+    if (req.query.dataFim !== undefined) {
+      whereFluxos.data[Op.lte] = req.query.dataFim;
+    }
+  }
 
+  if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
+    whereFluxos.hora = {};
+    if (req.query.horaInicio !== undefined) {
+      whereFluxos.hora[Op.gte] = req.query.horaInicio;
+    }
+    if (req.query.horaFim !== undefined) {
+      whereFluxos.hora[Op.lte] = req.query.horaFim;
+    }
+  }
 
   models.Fluxo.findAll({
+    limit: limit,
+    order: [["data", "DESC"]],
     where: { ...whereFluxos },
     include: [
       {
@@ -25,32 +47,11 @@ function index(req, res) {
     ],
   })
     .then((result) => {
-      if (limit) {
-        result = result.slice(0, limit);
-      }
-      if (req.query.dataInicio) {
-        result = result.filter(
-          (f) => new Date(f.data) >= new Date(req.query.dataInicio)
-        );
-      }
-      if (req.query.dataFim) {
-        result = result.filter(
-          (f) => new Date(f.data) <= new Date(req.query.dataFim)
-        );
-      }
-      if (req.query.horaInicio) {
-        result = result.filter(
-          (f) =>
-            new Date(`1970-01-01T${f.hora}`) >=
-            new Date(`1970-01-01T${req.query.horaInicio}`)
-        );
-      }
-      if (req.query.horaFim) {
-        result = result.filter(
-          (f) =>
-            new Date(`1970-01-01T${f.hora}`) <=
-            new Date(`1970-01-01T${req.query.horaFim}`)
-        );
+
+      if (!result) {
+        res.status(404).json({
+          message: "Fluxos não encontrados",
+        });
       }
 
       res.status(200).json(result);

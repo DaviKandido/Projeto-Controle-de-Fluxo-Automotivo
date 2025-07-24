@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-light nav-modified">
+  <div class="navbar-nav mx-3 img-pefil">
+    <img src="/assets/images/perfil.png" alt="imagem perfil">
+  </div>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          Equipamentos
+        </a>
+        <div class="dropdown-menu dropdown-modified">
+          <a class="dropdown-item" routerLink="/home/equipamentos">Visualizar</a>
+          <a class="dropdown-item" routerLink="/home/equipamentos/cadastrar">Cadastrar</a>
+        </div>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          Fluxos
+        </a>
+        <div class="dropdown-menu dropdown-modified">
+          <a class="dropdown-item" routerLink="/home/fluxos">Visualizar</a>
+          <a class="dropdown-item" routerLink="/home/fluxos/analise">Analise de dados</a>
+        </div>
+      </li>
+
+    </ul>
+    <div class="form-inline mr-3">
+        <a class="nav-link nav-modified" (click)="logout()">
+            Sair
+        </a>
+        <img src="/assets/images/log-out.png" alt="sair">
+    </div>
+  </div>
+</nav>

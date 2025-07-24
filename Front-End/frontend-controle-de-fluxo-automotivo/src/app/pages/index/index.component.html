@@ -32,7 +32,10 @@
       *ngIf="select == 'Cadastro'"
       [class.border-radios-right]="select == 'Cadastro'"
     >
-      <app-cadastro></app-cadastro>
+      <app-cadastro
+        [select]="select"
+        (selectChange)="select = $event"
+      ></app-cadastro>
     </div>
   </div>
 </main>

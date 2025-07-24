@@ -11,12 +11,4 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  logout() {
-    if(confirm("Deseja realmente sair?")) {
-      this._router.navigate(["/index"]).then(() => {
-        localStorage.clear();
-        window.location.reload();
-      })
-    }
-  }
 }

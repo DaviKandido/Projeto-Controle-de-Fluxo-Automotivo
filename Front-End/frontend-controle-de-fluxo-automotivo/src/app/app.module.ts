@@ -9,6 +9,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { FormsModule } from "@angular/forms";
 import {HttpClientModule} from '@angular/common/http';
 import { UserService } from "./services/user.service";
+import { NavbarComponent } from './pages/home/navbar/navbar.component';
+import { EquipamentoListComponent } from './pages/home/equipamento-list/equipamento-list.component';
+import { DisplayEquipamentoComponent } from './pages/home/display-equipamento/display-equipamento.component';
+import { DetailsEquipamentoComponent } from './pages/home/details-equipamento/details-equipamento.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +21,10 @@ import { UserService } from "./services/user.service";
     LoginComponent,
     CadastroComponent,
     HomeComponent,
+    NavbarComponent,
+    EquipamentoListComponent,
+    DisplayEquipamentoComponent,
+    DetailsEquipamentoComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [UserService],

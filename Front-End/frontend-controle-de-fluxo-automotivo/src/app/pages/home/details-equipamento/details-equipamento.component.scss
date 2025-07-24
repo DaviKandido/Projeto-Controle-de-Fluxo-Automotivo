@@ -1,0 +1,29 @@
+.card{
+    color: #434343;
+}
+
+ul{
+    list-style-type: none;
+    background-color: #434343;
+    padding: 1rem;
+    border-radius: 10px;
+    color: #FFFFFF;
+    li{
+        font-size: 1.2rem;
+        margin: 0.5rem 0;
+    }
+}
+
+.active{
+    color: green;
+    &::after{
+        content: "🟢";
+    }
+}
+
+.inactive{
+    color: red;
+        &::after{
+        content: "🔴";
+    }
+}

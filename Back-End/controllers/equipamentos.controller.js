@@ -1,7 +1,8 @@
 const models = require("../models");
 const Validator = require("fastest-validator");
+const { Op } = require("sequelize");
 
-async function index(req, res) {
+function index(req, res) {
   // Extrai e converte o limit, se existir
   const limit = req.query.limit ? parseInt(req.query.limit) : null;
   delete req.query.limit;
@@ -21,6 +22,25 @@ async function index(req, res) {
   const whereFluxos = {};
   if (req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
 
+if (req.query.dataInicio !== undefined || req.query.dataFim !== undefined) {
+  whereFluxos.data = {};
+  if (req.query.dataInicio !== undefined) {
+    whereFluxos.data[Op.gte] = req.query.dataInicio;
+  }
+  if (req.query.dataFim !== undefined) {
+    whereFluxos.data[Op.lte] = req.query.dataFim;
+  }
+}
+
+if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
+  whereFluxos.hora = {};
+  if (req.query.horaInicio !== undefined) {
+    whereFluxos.hora[Op.gte] = req.query.horaInicio;
+  }
+  if (req.query.horaFim !== undefined) {
+    whereFluxos.hora[Op.lte] = req.query.horaFim;
+  }
+}
 
   models.Equipamento.findAll({
     where: { ...whereEquipamento },
@@ -31,58 +51,18 @@ async function index(req, res) {
       {
         model: models.Municipio,
       },
-      // {
-      //   model: models.Fluxo,
-      //   where: {
-      //     ...whereFluxos,
-      //   },
-      // },
+      {
+        model: models.Fluxo,
+        limit: limit,
+        where: {
+          ...whereFluxos,
+        },
+        
+      },
     ],
   })
-    .then(async (result) => {
-      if (limit) {
-        result = result.slice(0, limit);
-      }
+    .then((result) => {
 
-      result = await Promise.all(
-        result.map(async (equip) => {
-          let fluxos = await models.Fluxo.findAll({
-            where: {
-              ...whereFluxos,
-              equipamentoId: equip.id,
-            },
-          });
-
-          if (req.query.dataInicio) {
-            fluxos = fluxos.filter(
-              (f) => new Date(f.data) >= new Date(req.query.dataInicio)
-            );
-          }
-          if (req.query.dataFim) {
-            fluxos = fluxos.filter(
-              (f) => new Date(f.data) <= new Date(req.query.dataFim)
-            );
-          }
-          if (req.query.horaInicio) {
-            fluxos = fluxos.filter(
-              (f) =>
-                new Date(`1970-01-01T${f.hora}`) >=
-                new Date(`1970-01-01T${req.query.horaInicio}`)
-            );
-          }
-          if (req.query.horaFim) {
-            fluxos = fluxos.filter(
-              (f) =>
-                new Date(`1970-01-01T${f.hora}`) <=
-                new Date(`1970-01-01T${req.query.horaFim}`)
-            );
-          }
-
-          const obj = equip.get({ plain: true });
-          obj.Fluxos = fluxos.length;
-          return obj;
-        })
-      );
 
       res.status(200).json(result);
     })

@@ -2,6 +2,8 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { IndexComponent } from "./pages/index/index.component";
 import { HomeComponent } from "./pages/home/home.component";
+import { EquipamentoListResolverServiceService } from "./services/equipamento-list-resolver-service.service";
+import { EquipamentoListComponent } from "./pages/home/equipamento-list/equipamento-list.component";
 
 const routes: Routes = [
   {
@@ -10,7 +12,19 @@ const routes: Routes = [
   },
   {
     path: "home",
-    component: HomeComponent,
+    children: [
+      {
+        path: "",
+        component: HomeComponent,
+      },
+      {
+        path: "equipamentos",
+        component: EquipamentoListComponent,
+        // resolve: {
+        //   equipamentoList: EquipamentoListResolverServiceService,
+        // },
+      },
+    ],
   },
   {
     path: "",
