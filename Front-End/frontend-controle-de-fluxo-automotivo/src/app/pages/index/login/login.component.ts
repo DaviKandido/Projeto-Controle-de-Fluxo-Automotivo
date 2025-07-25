@@ -23,9 +23,6 @@ export class LoginComponent implements OnInit {
 
   loginInit(): void {
     try {
-      if (this.loginData.senha != this.loginData.confirmSenha) {
-        throw new Error("Senhas não conferem");
-      }
       this._userService.login(this.loginData).subscribe(
         (res: any) => {
           if (res.token) {

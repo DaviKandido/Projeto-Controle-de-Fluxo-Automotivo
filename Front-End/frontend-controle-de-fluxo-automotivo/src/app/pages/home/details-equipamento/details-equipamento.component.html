@@ -24,24 +24,24 @@
         <div class="text-md-center mb-2">Descrição técnica:</div>
         <div class="row">
           <ul class="col-md-6 mx-2">
-            <li><span class="text-muted mr-2">Modelo:</span> {{ equipamento.modelo }}</li>
-            <li><span class="text-muted mr-2">Marca:</span> {{ equipamento.marca }}</li>
-            <li><span class="text-muted mr-2">Codigo:</span> {{ equipamento.codigo }}</li>
-            <li><span class="text-muted mr-2">Lacre:</span> {{ equipamento.lacre }}</li>
+            <li><span class="text-muted mr-2">Modelo:</span> {{ equipamento.modelo || "N/A" }}</li>
+            <li><span class="text-muted mr-2">Marca:</span> {{ equipamento.marca || "N/A" }}</li>
+            <li><span class="text-muted mr-2">Codigo:</span> {{ equipamento.codigo || "N/A" }}</li>
+            <li><span class="text-muted mr-2">Lacre:</span> {{ equipamento.lacre || "N/A" }}</li>
           </ul>
           <ul class="col-md-5 ml-2">
-            <li><span class="text-muted mr-2">Numero Inmetro:</span> {{ equipamento.numeroInmetro }}</li>
-            <li><span class="text-muted mr-2">Velocidade Limite:</span> {{ equipamento.velocidadeLimite }}</li>
-            <li><span class="text-muted mr-2">Tipo:</span> {{ equipamento.tipo }}</li>
-            <li><span class="text-muted mr-2">Faixa:</span> {{ equipamento.faixa }}</li>
+            <li><span class="text-muted mr-2">Numero Inmetro:</span> {{ equipamento.numeroInmetro || "N/A" }}</li>
+            <li><span class="text-muted mr-2">Velocidade Limite:</span> {{ equipamento.velocidadeLimite || "N/A" }}</li>
+            <li><span class="text-muted mr-2">Tipo:</span> {{ equipamento.tipo || "N/A" }}</li>
+            <li><span class="text-muted mr-2">Faixa:</span> {{ equipamento.faixa || "N/A" }}</li>
           </ul>
         </div>
       </div>
       <div class="col-md-4">
         <div class="text-md-center mb-2">Descrição administrativa:</div>
         <ul>
-          <li><span class="text-muted mr-2">Data de Aferição:</span> {{ equipamento.dataAfericao }}</li>
-          <li><span class="text-muted mr-2">Data de Registro:</span> {{ equipamento.numeroInmetro }}</li>
+          <li><span class="text-muted mr-2">Data de Aferição:</span> {{ equipamento.dataAfericao || "N/A" }}</li>
+          <li><span class="text-muted mr-2">Data de Registro:</span> {{ equipamento.dataRegistroInmetro || "N/A" }}</li>
         </ul>
       </div>
     </div>
@@ -50,15 +50,15 @@
     <div class="d-flex flex-row justify-content-between mx-4">
       <div>
         <span class="text-muted mr-2">Integrador: </span>
-        {{ equipamento.Integrador["nome"] }}
+        {{ equipamento.Integrador["nome"] || "N/A"}}
       </div>
       <div>
         <span class="text-muted mr-2">Municipio: </span>
-        {{ equipamento.Municipio["descricao"] }} - {{ equipamento.Municipio["uf"] }} - {{ equipamento.Municipio["codigo"] }}
+        {{ equipamento.Municipio["descricao"] || "N/A" }} - {{ equipamento.Municipio["uf"] || "N/A" }} - {{ equipamento.Municipio["codigo"] || "N/A" }}
       </div>
       <div>
         <span class="text-muted mr-2">Local: </span>
-        {{ equipamento.local }}
+        {{ equipamento.local || "N/A" }}
       </div>
     </div>
   </div>

@@ -1,0 +1,22 @@
+.card {
+  color: #434343;
+}
+
+option {
+  color: #434343;
+}
+
+.btn-orangeModify{
+    background-color: #E37761;
+    border: 2px solid #E37761;
+    padding: 0.5rem 3rem;
+    color: #fff;
+    border-radius: 10px;
+    font-weight: bold;
+    &:hover{
+        background-color: #fff;
+        color: #E37761;
+        scale: 1.05;
+    }
+}
+

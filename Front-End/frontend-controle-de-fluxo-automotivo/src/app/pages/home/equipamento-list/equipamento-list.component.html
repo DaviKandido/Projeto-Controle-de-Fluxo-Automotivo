@@ -1,4 +1,6 @@
 
 <div class="p-5">
-    <app-details-equipamento *ngFor="let equipamento of equipamentos" [equipamento]="equipamento"></app-details-equipamento>
+    <div *ngFor="let equipamento of equipamentos" class="mb-5">
+        <app-display-equipamento  [equipamento]="equipamento"></app-display-equipamento>
+    </div>
 </div>

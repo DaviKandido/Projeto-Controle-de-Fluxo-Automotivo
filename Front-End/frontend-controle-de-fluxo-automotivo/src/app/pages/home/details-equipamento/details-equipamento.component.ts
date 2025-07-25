@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Equipamento } from 'src/app/models/equipamento.model';
+import { EquipamentoService } from 'src/app/services/equipamento.service';
 
 @Component({
   selector: "app-details-equipamento",
@@ -8,11 +10,17 @@ import { Equipamento } from 'src/app/models/equipamento.model';
 })
 export class DetailsEquipamentoComponent implements OnInit {
 
-  @Input() equipamento: Equipamento;
+  private _id: number;
+  equipamento: Equipamento;
 
-  constructor() {}
+  constructor(private _router: Router, private _routeActivated: ActivatedRoute, private _equipamentoService:  EquipamentoService) {}
 
   ngOnInit(): void {
-    console.log(this.equipamento.Municipio);
+    this._routeActivated.params.subscribe((params) => {
+      this._equipamentoService.getEquipamento(+params["id"]).subscribe((equipamento) => {
+        this.equipamento = equipamento,
+        (error: any) => console.log(error)
+      })
+    })
   }
 }

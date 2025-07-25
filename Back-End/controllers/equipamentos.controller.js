@@ -22,25 +22,25 @@ function index(req, res) {
   const whereFluxos = {};
   if (req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
 
-if (req.query.dataInicio !== undefined || req.query.dataFim !== undefined) {
-  whereFluxos.data = {};
-  if (req.query.dataInicio !== undefined) {
-    whereFluxos.data[Op.gte] = req.query.dataInicio;
+  if (req.query.dataInicio !== undefined || req.query.dataFim !== undefined) {
+    whereFluxos.data = {};
+    if (req.query.dataInicio !== undefined) {
+      whereFluxos.data[Op.gte] = req.query.dataInicio;
+    }
+    if (req.query.dataFim !== undefined) {
+      whereFluxos.data[Op.lte] = req.query.dataFim;
+    }
   }
-  if (req.query.dataFim !== undefined) {
-    whereFluxos.data[Op.lte] = req.query.dataFim;
-  }
-}
 
-if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
-  whereFluxos.hora = {};
-  if (req.query.horaInicio !== undefined) {
-    whereFluxos.hora[Op.gte] = req.query.horaInicio;
+  if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
+    whereFluxos.hora = {};
+    if (req.query.horaInicio !== undefined) {
+      whereFluxos.hora[Op.gte] = req.query.horaInicio;
+    }
+    if (req.query.horaFim !== undefined) {
+      whereFluxos.hora[Op.lte] = req.query.horaFim;
+    }
   }
-  if (req.query.horaFim !== undefined) {
-    whereFluxos.hora[Op.lte] = req.query.horaFim;
-  }
-}
 
   models.Equipamento.findAll({
     where: { ...whereEquipamento },
@@ -57,13 +57,10 @@ if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
         where: {
           ...whereFluxos,
         },
-        
       },
     ],
   })
     .then((result) => {
-
-
       res.status(200).json(result);
     })
     .catch((err) => {
@@ -76,7 +73,50 @@ if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
 
 function show(req, res) {
   const id = req.params.id;
-  models.Equipamento.findByPk(id)
+
+  const whereFluxos = {};
+  if (req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
+
+  if (req.query.dataInicio !== undefined || req.query.dataFim !== undefined) {
+    whereFluxos.data = {};
+    if (req.query.dataInicio !== undefined) {
+      whereFluxos.data[Op.gte] = req.query.dataInicio;
+    }
+    if (req.query.dataFim !== undefined) {
+      whereFluxos.data[Op.lte] = req.query.dataFim;
+    }
+  }
+
+  if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
+    whereFluxos.hora = {};
+    if (req.query.horaInicio !== undefined) {
+      whereFluxos.hora[Op.gte] = req.query.horaInicio;
+    }
+    if (req.query.horaFim !== undefined) {
+      whereFluxos.hora[Op.lte] = req.query.horaFim;
+    }
+  }
+
+  const limit = req.query.limit ? parseInt(req.query.limit) : null;
+  delete req.query.limit;
+
+  models.Equipamento.findByPk(id, {
+    include: [
+      {
+        model: models.Integrador,
+      },
+      {
+        model: models.Municipio,
+      },
+      {
+        model: models.Fluxo,
+        limit: limit,
+        where: {
+          ...whereFluxos,
+        },
+      },
+    ],
+  })
     .then((result) => {
       if (result) {
         res.status(200).json(result);

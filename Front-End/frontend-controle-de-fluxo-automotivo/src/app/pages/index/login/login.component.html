@@ -50,26 +50,6 @@
         Senha é obrigradória
       </span>
     </div>
-    <div class="form-group" *ngIf="loginData.senha != null">
-      <label for="confirmPassword" class="text-black">Confirm sua senha</label>
-      <input
-        type="password"
-        name="confirmSenha"
-        [class.is-invalid]="confirmSenha.invalid && confirmSenha.touched"
-        class="form-control border-0 w-100"
-        id="confirmSenha"
-        required
-        [(ngModel)]="loginData.confirmSenha"
-        #confirmSenha="ngModel"
-        placeholder="Digite a sua senha novamente..."
-      />
-      <span
-        class="invalid-feedback"
-        *ngIf="confirmSenha.errors?.required && confirmSenha.touched"
-      >
-        Confirmação de senha é obrigradória
-      </span>
-    </div>
 
     <div class="d-flex flex-column align-items-center justify-content-center">
       <button

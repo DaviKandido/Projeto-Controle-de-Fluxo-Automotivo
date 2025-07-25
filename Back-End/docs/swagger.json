@@ -679,6 +679,16 @@
       "get": {
         "tags": ["Municípios"],
         "summary": "Listar municípios",
+        "parameters": [
+          {
+            "name": "uf",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por destrito(UF)"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de municípios",

@@ -1,0 +1,214 @@
+<form #equipamentoForm="ngForm" method="post">
+  <div class="card">
+    <div class="card-header h5">Cadastro de Equipamentos</div>
+    <div class="card-body">
+      <div class="row">
+        <!-- CODIGO -->
+        <div class="form-group col-md-4">
+          <label for="codigo">Codigo: </label>
+          <input
+            type="text"
+            id="codigo"
+            name="codigo"
+            class="form-control"
+            placeholder="Digite o codigo do equipamento..."
+            maxlength="11"
+            required
+          />
+        </div>
+
+        <!-- FAIXA -->
+        <div class="form-group col-md-4">
+          <label for="faixa">Faixa: </label>
+          <input
+            type="number"
+            id="faixa"
+            name="faixa"
+            class="form-control"
+            max="127"
+            min="1"
+            placeholder="Digite a faixa do equipamento..."
+            required
+          />
+        </div>
+
+        <!-- TIPO -->
+        <div class="form-group col-md-4">
+          <label for="tipo">Tipo: </label>
+          <select name="tipo" id="tipo" class="form-control" required>
+            <option [ngValue]="null" disabled>Selecione o tipo</option>
+            <option value="CEV">CEV</option>
+            <option value="REV">REV</option>
+            <option value="CEM">CEM</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- LOCAL -->
+        <div class="form-group col-md-5">
+          <label for="local">Local: </label>
+          <input
+            type="text"
+            id="local"
+            name="local"
+            class="form-control"
+            placeholder="Digite o local do equipamento..."
+            maxlength="80"
+            required
+          />
+        </div>
+
+        <!-- MARCA -->
+        <div class="form-group col-md-4">
+          <label for="marca">Marca: </label>
+          <input
+            type="text"
+            id="marca"
+            name="marca"
+            class="form-control"
+            placeholder="Digite a marca do equipamento..."
+            maxlength="40"
+            required
+          />
+        </div>
+
+        <!-- MODELO -->
+        <div class="form-group col-md-3">
+          <label for="modelo">Modelo: </label>
+          <input
+            type="text"
+            id="modelo"
+            name="modelo"
+            class="form-control"
+            placeholder="Digite o modelo do equipamento..."
+            maxlength="40"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- VELOCIDADE LIMITE -->
+        <div class="form-group col-md-2">
+          <label for="velocidadeLimite">Velocidade Limite: </label>
+          <input
+            type="number"
+            id="velocidadeLimite"
+            name="velocidadeLimite"
+            class="form-control"
+            placeholder="Digite a velocidade limite do equipamento..."
+            min="0"
+          />
+        </div>
+
+        <!-- DATA DE AFERIÇÃO -->
+        <div class="form-group col-md-2">
+          <label for="dataAfericao">Data de Aferição: </label>
+          <input
+            type="date"
+            id="dataAfericao"
+            name="dataAfericao"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <!-- LACRE -->
+        <div class="form-group col-md-4">
+          <label for="lacre">Lacre: </label>
+          <input
+            type="text"
+            id="lacre"
+            name="lacre"
+            class="form-control"
+            placeholder="Digite o lacre do equipamento..."
+            maxlength="20"
+            required
+          />
+        </div>
+
+        <!-- ATIVO -->
+        <div class="form-groupt">
+          <label for="ativo" class="text-nowrap">Esta Ativo: </label>
+          <input type="checkbox" id="ativo" name="ativo" class="form-control" required/>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- NUMERO INMETRO -->
+        <div class="form-group col-md-4">
+          <label for="numeroInmetro">Numero Inmetro: </label>
+          <input
+            type="text"
+            id="numeroInmetro"
+            name="numeroInmetro"
+            class="form-control"
+            placeholder="Digite o numero inmetro do equipamento..."
+            maxlength="30"
+          />
+        </div>
+
+        <!-- DATA DE REGISTRO INMETRO -->
+        <div class="form-group col-md-2">
+          <label for="dataRegistroInmetro">Data de Registro: </label>
+          <input
+            type="date"
+            id="dataRegistroInmetro"
+            name="dataRegistroInmetro"
+            class="form-control"
+          />
+        </div>
+
+        <!-- INTEGRADOR -->
+        <div class="form-group col-md-4">
+          <label for="integrador">Integrador: </label>
+          <select name="integrador" id="integrador" class="form-control" required>
+            <option [ngValue]="null" disabled>Selecione o integrador</option>
+            <option value="1">Integrador 1</option>
+            <option value="2">Integrador 2</option>
+            <option value="3">Integrador 3</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Estado UF -->
+        <div class="form-group col-md-1">
+          <label for="estado">Estado: </label>
+          <ng-select
+            name="estado"
+            id="estado"
+            [items]="UFS"
+            [(ngModel)]="estadoSelecionado"
+            #estadoModel="ngModel"
+            bindLabel="sigla"
+            bindValue="sigla"
+            [searchable]="true"
+            [clearable]="true"
+          >
+          </ng-select>
+        </div>
+
+        <!-- MUNICIPIO CIDADE -->
+        <div class="form-group col-md-5">
+          <label for="municipio">Municipio: </label>
+          <ng-select
+            name="municipio"
+            id="municipio"
+            [items]="municipiosExibidos"
+            bindLabel="descricao"
+            bindValue="id"
+            [searchable]="true"
+            [clearable]="true"
+          >
+          </ng-select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button type="submit" class="btn btn-orangeModify">Salvar</button>
+    </div>
+  </div>
+</form>

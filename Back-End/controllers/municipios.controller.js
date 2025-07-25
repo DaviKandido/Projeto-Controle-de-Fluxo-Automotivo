@@ -1,9 +1,16 @@
+const { where } = require("sequelize");
 const models = require("../models");
 const Validator = require("fastest-validator");
 
+
 function index(req, res) {
-  models.Municipio
-    .findAll()
+  
+  whereMunicipios = {};
+  if (req.query.uf) whereMunicipios.uf = req.query.uf.toUpperCase();
+
+  models.Municipio.findAll({
+    where: { ...whereMunicipios },
+  })
     .then((result) => {
       res.status(200).json(result);
     })
@@ -17,8 +24,7 @@ function index(req, res) {
 
 function show(req, res) {
   const id = req.params.id;
-  models.Municipio
-    .findByPk(id)
+  models.Municipio.findByPk(id)
     .then((result) => {
       if (result) {
         res.status(200).json(result);
@@ -112,66 +118,65 @@ function save(req, res) {
 
 function update(req, res) {
   const id = req.params.id;
-   const municipioUpdate = {
-     codigo: req.body.codigo,
-     descricao: req.body.descricao,
-     uf: req.body.uf,
-   };
+  const municipioUpdate = {
+    codigo: req.body.codigo,
+    descricao: req.body.descricao,
+    uf: req.body.uf,
+  };
 
-   const schema = {
-     codigo: { type: "number", optional: false },
-     descricao: { type: "string", optional: false, max: "255" },
-     uf: {
-       type: "enum",
-       values: [
-         "AC",
-         "AL",
-         "AP",
-         "AM",
-         "BA",
-         "CE",
-         "DF",
-         "ES",
-         "GO",
-         "MA",
-         "MT",
-         "MS",
-         "MG",
-         "PA",
-         "PB",
-         "PR",
-         "PE",
-         "PI",
-         "RJ",
-         "RN",
-         "RS",
-         "RO",
-         "RR",
-         "SC",
-         "SP",
-         "SE",
-         "TO",
-       ],
-       optional: false,
-     },
-   };
+  const schema = {
+    codigo: { type: "number", optional: false },
+    descricao: { type: "string", optional: false, max: "255" },
+    uf: {
+      type: "enum",
+      values: [
+        "AC",
+        "AL",
+        "AP",
+        "AM",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "GO",
+        "MA",
+        "MT",
+        "MS",
+        "MG",
+        "PA",
+        "PB",
+        "PR",
+        "PE",
+        "PI",
+        "RJ",
+        "RN",
+        "RS",
+        "RO",
+        "RR",
+        "SC",
+        "SP",
+        "SE",
+        "TO",
+      ],
+      optional: false,
+    },
+  };
 
-   const v = new Validator();
-   const validationResponse = v.validate(municipioUpdate, schema);
+  const v = new Validator();
+  const validationResponse = v.validate(municipioUpdate, schema);
 
-   if (validationResponse !== true) {
-     return res.status(400).json({
-       message: "falha na validação!",
-       errors: validationResponse,
-     });
-   }
+  if (validationResponse !== true) {
+    return res.status(400).json({
+      message: "falha na validação!",
+      errors: validationResponse,
+    });
+  }
 
-  models.Municipio
-    .update(municipioUpdate, {
-      where: {
-        id: id,
-      },
-    })
+  models.Municipio.update(municipioUpdate, {
+    where: {
+      id: id,
+    },
+  })
     .then((result) => {
       res.status(200).json({
         message: "Municipio atualizado com sucesso",
@@ -179,7 +184,6 @@ function update(req, res) {
           id: id,
           ...municipioUpdate,
         },
-
       });
     })
     .catch((err) => {
@@ -193,12 +197,11 @@ function update(req, res) {
 function destroy(req, res) {
   const id = req.params.id;
 
-  models.Municipio
-    .destroy({
-      where: {
-        id: id,
-      },
-    })
+  models.Municipio.destroy({
+    where: {
+      id: id,
+    },
+  })
     .then((result) => {
       res.status(200).json({
         message: "Municipio removido com sucesso",
