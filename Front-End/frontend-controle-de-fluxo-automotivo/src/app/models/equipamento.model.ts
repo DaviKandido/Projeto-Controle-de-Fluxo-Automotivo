@@ -1,9 +1,15 @@
+import { Integrador } from "./integrador.model";
+import { Municipio } from "./municipio.model";
+
+
+
+
 export class Equipamento {
   id?: string | number;
   codigo!: string;
   faixa!: number;
   tipo!: string;
-  ativo!: boolean;
+  ativo!: boolean | 0 | 1;
   local!: string;
   marca!: string;
   modelo!: string;
@@ -14,7 +20,7 @@ export class Equipamento {
   numeroInmetro!: string;
   integradorId!: number;
   municipioId!: number;
-  Integrador?: object;
-  Municipio?: object;
+  Integrador?: Integrador;
+  Municipio?: Municipio;
   Fluxos?: object;
 }

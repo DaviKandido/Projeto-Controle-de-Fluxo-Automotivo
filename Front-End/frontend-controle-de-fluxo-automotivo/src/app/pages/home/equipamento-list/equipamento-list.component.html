@@ -1,6 +1,80 @@
-
-<div class="p-5">
-    <div *ngFor="let equipamento of equipamentos" class="mb-5">
-        <app-display-equipamento  [equipamento]="equipamento"></app-display-equipamento>
+<div class="p-4">
+  <form
+    #formFilter="ngForm"
+    method="get"
+    class="mb-5"
+    (change)="onFilterChange()"
+  >
+    <div class="row">
+      <div class="col-md-10">
+        <label for="busca">Busca de equipamentos</label>
+        <input
+          type="text"
+          class="form-control"
+          name="busca"
+          id="busca"
+          placeholder="Digite o termo de busca..."
+          [(ngModel)]="busca"
+          #buscaModel="ngModel"
+        />
+      </div>
+      <div class="col-md-2">
+        <label for="filtro">Filtros</label>
+        <select
+          class="custom-select"
+          id="filtro"
+          required
+          name="filtro"
+          [(ngModel)]="filtro"
+          #filtroModel="ngModel"
+        >
+          <option value="codigo" selected>Codigo</option>
+          <option value="faixa">Faixa</option>
+          <option value="integrador">Integrador</option>
+        </select>
+      </div>
     </div>
+    <div class="btn-group btn-group-toggle mt-4" data-toggle="buttons">
+      <label class="btn btn-secondary active">
+        <input
+          type="radio"
+          id="Qualquer"
+          checked
+          name="isAtivo"
+          value="qualquer"
+          [(ngModel)]="isAtivo"
+          #ativoModel="ngModel"
+        />
+        Qualquer
+      </label>
+      <label class="btn btn-success">
+        <input
+          type="radio"
+          id="Ativos"
+          value="ativo"
+          name="isAtivo"
+          [(ngModel)]="isAtivo"
+          #ativoModel="ngModel"
+        />
+        Ativos
+      </label>
+      <label class="btn btn-danger">
+        <input
+          type="radio"
+          id="Inativos"
+          name="inativo"
+          value="false"
+          [(ngModel)]="isAtivo"
+          #ativoModel="ngModel"
+        />
+        Inativos
+      </label>
+    </div>
+  </form>
+
+  <div *ngFor="let equipamento of equipamentos" class="mb-5">
+    <app-display-equipamento
+      [equipamento]="equipamento"
+    ></app-display-equipamento>
+  </div>
 </div>

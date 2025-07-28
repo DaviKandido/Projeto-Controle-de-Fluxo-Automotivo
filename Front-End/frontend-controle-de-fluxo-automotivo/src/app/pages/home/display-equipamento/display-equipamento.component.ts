@@ -19,6 +19,7 @@ export class DisplayEquipamentoComponent implements OnInit {
       this._equipamentoService.deleteEquipamento(Equipamento).subscribe(
         () => {
           alert("Equipamento deletado com sucesso!");
+          window.location.reload();
         },
         (err) => {
           alert(`Erro ao deletar: ${err.error.message}`);

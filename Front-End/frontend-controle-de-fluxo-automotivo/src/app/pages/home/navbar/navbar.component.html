@@ -10,7 +10,7 @@
         </a>
         <div class="dropdown-menu dropdown-modified">
           <a class="dropdown-item" routerLink="/home/equipamentos">Visualizar</a>
-          <a class="dropdown-item" routerLink="/home/cadastrar/equipamentos">Cadastrar</a>
+          <a class="dropdown-item" [routerLink]="['/home/edit/equipamentos', 0]">Cadastrar</a>
         </div>
       </li>
         <li class="nav-item dropdown">

@@ -948,6 +948,15 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/idPath"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "default": "30"
+            },
+            "description": "Limite de fluxos retornados"
           }
         ],
         "responses": {

@@ -1,4 +1,3 @@
-const { where } = require("sequelize");
 const models = require("../models");
 const Validator = require("fastest-validator");
 
@@ -10,6 +9,7 @@ function index(req, res) {
 
   models.Municipio.findAll({
     where: { ...whereMunicipios },
+    order: [["descricao", "ASC"]],
   })
     .then((result) => {
       res.status(200).json(result);

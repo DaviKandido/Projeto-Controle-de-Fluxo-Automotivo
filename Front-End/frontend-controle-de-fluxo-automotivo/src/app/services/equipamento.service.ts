@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Equipamento } from '../models/equipamento.model';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "src/environments/environment";
+import { Equipamento } from "../models/equipamento.model";
 
 @Injectable({
   providedIn: "root",
@@ -14,17 +14,50 @@ export class EquipamentoService {
 
   baseUrl = `${environment.apiUrl}/equipamentos`;
 
-  getEquipamentos(): Observable<Equipamento[]> {
-    return this.HttpClient.get<Equipamento[]>(`${this.baseUrl}?limit=5`);
+  getEquipamentos(params?: any): Observable<Equipamento[]> {
+    let limit = params?.limit || 0;
+    let string = "";
+
+    if (params?.isAtivo != "qualquer") {
+      string = `ativo=${params?.isAtivo == "ativo" ? "true" : "false"}`;
+    }
+    if (params?.busca !== "") {
+      switch (params?.filtro) {
+        case "codigo":
+          string = `&codigo=${params?.busca}`;
+          break;
+        case "faixa":
+          string = `&faixa=${params?.busca}`;
+          break;
+        case "tipo":
+          string = `&tipo=${params?.busca}`;
+          break;
+        case "local":
+          string = `&local=${params?.busca}`;
+          break;
+        case "marca":
+          string = `&marca=${params?.busca}`;
+          break;
+        case "modelo":
+          string = `&modelo=${params?.busca}`;
+          break;
+      }
+    }
+
+    return this.HttpClient.get<Equipamento[]>(
+      `${this.baseUrl}?limit=${limit || 0}&${string}`
+    );
   }
 
-  getEquipamento(id: number): Observable<Equipamento> {
-    return this.HttpClient.get<Equipamento>(`${this.baseUrl}/${id}`);
+  getEquipamento(id: number, limite?: number): Observable<Equipamento> {
+    return this.HttpClient.get<Equipamento>(
+      `${this.baseUrl}/${id}?limit=${limite || 0}`
+    );
   }
 
   deleteEquipamento(equipamento: Equipamento): Observable<Equipamento> {
     return this.HttpClient.delete<Equipamento>(
-      `${this.baseUrl}/${equipamento.id}?limit=5`,
+      `${this.baseUrl}/${equipamento.id}`,
       {
         headers: new HttpHeaders({
           Authorization: `Bearer ${this.token}`,
@@ -42,11 +75,15 @@ export class EquipamentoService {
     });
   }
   updateEquipamento(Equipamento: Equipamento): Observable<Equipamento> {
-    return this.HttpClient.put<Equipamento>(`${this.baseUrl}`, Equipamento, {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.token}`,
-      }),
-    });
+    return this.HttpClient.put<Equipamento>(
+      `${this.baseUrl}/${Equipamento.id}`,
+      Equipamento,
+      {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`,
+        }),
+      }
+    );
   }
 }

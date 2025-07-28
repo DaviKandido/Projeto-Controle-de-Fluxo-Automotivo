@@ -6,6 +6,7 @@ import { EquipamentoListResolverServiceService } from "./services/equipamento-li
 import { EquipamentoListComponent } from "./pages/home/equipamento-list/equipamento-list.component";
 import { DetailsEquipamentoComponent } from "./pages/home/details-equipamento/details-equipamento.component";
 import { CreateEquipamentoComponent } from "./pages/home/create-equipamento/create-equipamento.component";
+import { CanDeactivateCreateEquipamentoComponentService } from "./services/can-deactivate-create-equipamento-component.service";
 
 const routes: Routes = [
   {
@@ -28,8 +29,9 @@ const routes: Routes = [
         component: DetailsEquipamentoComponent,
       },
       {
-        path: "cadastrar/equipamentos",
+        path: "edit/equipamentos/:id",
         component: CreateEquipamentoComponent,
+        canDeactivate: [CanDeactivateCreateEquipamentoComponentService],
       },
     ],
   },

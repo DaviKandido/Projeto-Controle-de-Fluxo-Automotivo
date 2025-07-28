@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Equipamento } from "src/app/models/equipamento.model";
+import { EquipamentoService } from "src/app/services/equipamento.service";
 
 @Component({
   selector: "app-equipamento-list",
@@ -10,8 +11,8 @@ import { Equipamento } from "src/app/models/equipamento.model";
 export class EquipamentoListComponent implements OnInit {
   error: string;
 
-  equipamentos: Equipamento[]
-  //  = [
+  equipamentos: Equipamento[];
+
   //   {
   //     id: 1,
   //     codigo: "EQP001",
@@ -71,7 +72,8 @@ export class EquipamentoListComponent implements OnInit {
 
   constructor(
     private _router: Router,
-    private _routeActivated: ActivatedRoute
+    private _routeActivated: ActivatedRoute,
+    private _equipamentoService: EquipamentoService
   ) {
     const resolveData: Equipamento[] | string =
       this._routeActivated.snapshot.data["equipamentoList"];
@@ -83,5 +85,38 @@ export class EquipamentoListComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  busca: string = "";
+  filtro: string = "codigo";
+  isAtivo: string = "qualquer";
+
+  onFilterChange() {
+    this._router.navigate([], {
+      relativeTo: this._routeActivated,
+      queryParams: {
+        busca: this.busca,
+        filtro: this.filtro,
+        isAtivo: this.isAtivo,
+      },
+      queryParamsHandling: "merge",
+    });
+  }
+
+  ngOnInit(): void {
+    this._routeActivated.queryParams.subscribe((params) => {
+      let paramsMetros = {}
+      paramsMetros["limit"] = 0;
+      paramsMetros["busca"] = params["busca"];
+      paramsMetros["filtro"] = params["filtro"];
+      paramsMetros["isAtivo"] = params["isAtivo"];
+
+      console.log(paramsMetros);
+      
+      this._equipamentoService.getEquipamentos({...paramsMetros}).subscribe(
+        (equipamentos) => {
+          this.equipamentos = equipamentos;
+        },
+        (error: any) => console.log(error)
+      );
+    });
+  }
 }
