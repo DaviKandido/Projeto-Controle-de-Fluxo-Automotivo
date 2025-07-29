@@ -37,7 +37,7 @@ function index(req, res) {
 
   models.Fluxo.findAll({
     limit: limit,
-    order: [["data", "DESC"]],
+    order: [["data", "DESC"], ["hora", "DESC"]],
     where: { ...whereFluxos },
     include: [
       {

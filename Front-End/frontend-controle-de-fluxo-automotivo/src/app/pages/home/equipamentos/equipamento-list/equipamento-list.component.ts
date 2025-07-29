@@ -1,4 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { NgForm } from '@angular/forms';
+import { Integrador } from './../../../../models/integrador.model';
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Equipamento } from "src/app/models/equipamento.model";
 import { EquipamentoService } from "src/app/services/equipamento.service";
@@ -10,6 +12,8 @@ import { EquipamentoService } from "src/app/services/equipamento.service";
 })
 export class EquipamentoListComponent implements OnInit {
   error: string;
+  
+  @ViewChild("formFilter") public formFilter: NgForm;
 
   equipamentos: Equipamento[];
 
@@ -85,34 +89,36 @@ export class EquipamentoListComponent implements OnInit {
     }
   }
 
-  busca: string = "";
-  filtro: string = "codigo";
-  isAtivo: string = "qualquer";
+  codigo: string = "";
+  faixa: number = 0;
+  integrador: Integrador;
+  ativo: boolean = null;
 
   onFilterChange() {
     this._router.navigate([], {
       relativeTo: this._routeActivated,
       queryParams: {
-        busca: this.busca,
-        filtro: this.filtro,
-        isAtivo: this.isAtivo,
+        codigo: this.codigo,
+        faixa: this.faixa,
+        Integrador: this.integrador,
+        ativo: this.ativo,
       },
       queryParamsHandling: "merge",
     });
   }
 
+  clearFilters() {
+    this.formFilter.reset();
+    this.onFilterChange();
+  }
+
   ngOnInit(): void {
     this._routeActivated.queryParams.subscribe((params) => {
-      let paramsMetros = {}
-      paramsMetros["limit"] = 0;
-      paramsMetros["busca"] = params["busca"];
-      paramsMetros["filtro"] = params["filtro"];
-      paramsMetros["isAtivo"] = params["isAtivo"];
+      console.log(params);
 
-      console.log(paramsMetros);
-      
-      this._equipamentoService.getEquipamentos({...paramsMetros}).subscribe(
+      this._equipamentoService.getEquipamentos(params).subscribe(
         (equipamentos) => {
+          console.log(equipamentos);
           this.equipamentos = equipamentos;
         },
         (error: any) => console.log(error)

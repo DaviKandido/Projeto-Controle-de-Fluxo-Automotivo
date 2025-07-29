@@ -1,0 +1,56 @@
+<div class="card">
+  <div class="card-header h5">
+    <div class="d-flex flex-row justify-content-between mx-4">
+      <div>
+        <span class="text-muted">Sequencial: </span> {{ fluxo.seq }}
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">
+      <span class="text-muted ml-4 mr-2">Data: </span>
+      {{ fluxo.data | date: "dd/MM/yyyy" }} - {{ fluxo.hora || "N/A" }}
+    </h5>
+    <div class="col">
+    <div class="col-md-12">
+        <div class="text-md-center mb-2">Dados Tecnicos:</div>
+        <ul>
+        <li><span class="text-muted mr-2">Data de Recebimento:</span> {{ fluxo.dataRecebimento || "N/A" }}</li>
+        <li><span class="text-muted mr-2">Visualizar Equipmaentos: </span>
+            <a class="btn btn-danger" [routerLink]="['/home/equipamentos', fluxo.equipamentoId]">Buscar Equipamentos</a>
+        </li>
+        </ul>
+    </div>
+      <div class="col-md-12">
+        <div class="text-md-center mb-2"> Veiculo:</div>
+        <div class="row">
+          <ul class="col-md mx-2">
+            <li><span class="text-muted mr-2">Palca:</span> {{ fluxo.placa || "N/A" }}</li>
+            <li><span class="text-muted mr-2">Tamanho:</span> {{ fluxo.tamVeic || "N/A" }}</li>
+          </ul>
+          <ul class="col-md mx-2">
+            <li><span class="text-muted mr-2">Classificação:</span> {{ fluxo.classVeic || "N/A" }}</li>
+            <li><span class="text-muted mr-2">Peso:</span> {{ fluxo.pesoBt || "N/A" }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <!-- <div class="d-flex flex-row justify-content-between mx-4">
+      <div>
+        <span class="text-muted mr-2">Integrador: </span>
+        {{ equipamento.Integrador["nome"] || "N/A"}}
+      </div>
+      <div>
+        <span class="text-muted mr-2">Municipio: </span>
+        {{ equipamento.Municipio["descricao"] || "N/A" }} - {{ equipamento.Municipio["uf"] || "N/A" }} - {{ equipamento.Municipio["codigo"] || "N/A" }}
+      </div>
+      <div>
+        <span class="text-muted mr-2">Local: </span>
+        {{ equipamento.local || "N/A" }}
+      </div>
+    </div> -->
+  </div>
+</div>
+

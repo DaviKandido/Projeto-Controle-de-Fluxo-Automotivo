@@ -1,0 +1,36 @@
+
+.card {
+  color: #434343;
+
+  .mouseover {
+    display: none;
+  }
+
+  &:hover {
+    background-color: #707070;
+    color: white;
+    cursor: pointer;
+    .text-muted {
+      color: #dbdbdb !important;
+    }
+    .mouseover {
+      display: block !important;
+    }
+  }
+}
+
+ul {
+  list-style-type: none;
+  background-color: #434343;
+  padding: 1rem;
+  border-radius: 10px;
+  color: #ffffff;
+  li {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+}
+
+option {
+  color: #434343;
+}

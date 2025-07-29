@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Municipio } from '../models/municipio.model';
@@ -12,7 +12,13 @@ export class MunicipioService {
   constructor(private HttpClient: HttpClient) { }
 
   getMunicipios(): Observable<Municipio[]> {
-    return this.HttpClient.get<Municipio[]>(`${environment.apiUrl}/municipios`);
+
+    let params = new HttpParams();
+    params = params.append('limit', '10');
+
+    return this.HttpClient.get<Municipio[]>(`${environment.apiUrl}/municipios`, {
+      params: params
+    });
   }
 
 }

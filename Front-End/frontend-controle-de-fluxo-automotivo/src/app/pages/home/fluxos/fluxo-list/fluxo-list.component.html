@@ -1,0 +1,120 @@
+<div>
+  <div class="row">
+    <form #formFilter="ngForm" method="get" class="col-md-3 mb-4" (submit)="onFilterChange()">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Filtros:</h5>
+        </div>
+        <div class="card-body">
+          <!-- código do equipamento -->
+          <div class="form-group">
+            <label for="codigo">Codigo do equipamento:</label>
+            <input
+              type="text"
+              name="codigo"
+              id="codigo"
+              maxlength="11"
+              class="form-control"
+              placeholder="Digite o codigo do equipamento..."
+              [(ngModel)]="codigo"
+              #codigoModel="ngModel"
+            />
+          </div>
+
+          <!-- faixa do equipamento -->
+          <div class="form-group">
+            <label for="faixa">Faixa do equipamento:</label>
+            <select name="faixa" id="faixa" class="form-control" [(ngModel)]="faixa" #faixaModel="ngModel">
+              <option [ngValue]="null" selected>Qualquer</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+
+          <!-- placa -->
+          <div class="form-group">
+            <label for="placa">Placa do veiculo:</label>
+            <input
+              type="text"
+              name="placa"
+              id="placa"
+              maxlength="7"
+              class="form-control"
+              placeholder="Digite o a placa do veiculo..."
+              [(ngModel)]="placa"
+              #placaModel="ngModel"
+            />
+          </div>
+
+          <!-- Intervalo de datas, inicio e fim -->
+          <div class="text-muted text-center my-2">Intervalo de datas:</div>
+          <div class="row form-group">
+            <div class="col-md-6">
+              <label for="dataInicio">Data de inicio:</label>
+              <input
+                type="date"
+                name="dataInicio"
+                id="dataInicio"
+                class="form-control"
+                [(ngModel)]="horaInicio"
+                #dataInicioModel="ngModel"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="dataFim">Data de fim:</label>
+              <input
+                type="date"
+                name="dataFim"
+                id="dataFim"
+                class="form-control"
+                [(ngModel)]="dataFim"
+                #dataFimModel="ngModel"
+              />
+            </div>
+          </div>
+
+          <!-- Intervalo de horas -->
+          <div class="text-muted text-center my-2">Intervalo de horas:</div>
+          <div class="row form-group">
+            <div class="col-md">
+              <label for="horaInicio">Hora de inicio:</label>
+              <input
+                type="time"
+                name="horaInicio"
+                id="horaInicio"
+                class="form-control"
+                [(ngModel)]="horaInicio"
+                #horaInicioModel="ngModel"
+              />
+            </div>
+            <div class="col-md">
+              <label for="horaFim">Hora de fim:</label>
+              <input
+                type="time"
+                name="horaFim"
+                id="horaFim"
+                class="form-control"
+                [(ngModel)]="horaFim"
+                #horaFimModel="ngModel"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="d-flex flex-row justify-content-between">
+            <button type="submit" class="btn btn-primary" [disabled]="!formFilter.valid">Filtrar</button>
+            <button type="button" class="btn btn-danger" (click)="clearFilters()">Limpar filtros</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="col-md">
+      <div class="mb-4" *ngFor="let fluxo of fluxos">
+        <app-display-fluxo [fluxo]="fluxo"></app-display-fluxo>
+      </div>
+    </div>
+  </div>
+</div>

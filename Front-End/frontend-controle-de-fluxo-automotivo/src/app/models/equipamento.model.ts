@@ -2,8 +2,6 @@ import { Integrador } from "./integrador.model";
 import { Municipio } from "./municipio.model";
 
 
-
-
 export class Equipamento {
   id?: string | number;
   codigo!: string;

@@ -1,4 +1,4 @@
-import { Integrador } from "./../../../models/integrador.model";
+import { Integrador } from "../../../../models/integrador.model";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -25,7 +25,7 @@ export class CreateEquipamentoComponent implements OnInit {
     local: null,
     marca: null,
     modelo: null,
-    velocidadeLimite: null, 
+    velocidadeLimite: null,
     dataAfericao: null,
     lacre: null,
     dataRegistroInmetro: null,
@@ -141,8 +141,9 @@ export class CreateEquipamentoComponent implements OnInit {
           this.estadoSelecionado = this.equipamento.Municipio.uf;
         },
         (error: any) => {
-           alert(`Erro ao buscar Equipamento: ${error.error.message}`);
-          console.log(error)}
+          alert(`Erro ao buscar Equipamento: ${error.error.message}`);
+          console.log(error);
+        }
       );
     }
   }
