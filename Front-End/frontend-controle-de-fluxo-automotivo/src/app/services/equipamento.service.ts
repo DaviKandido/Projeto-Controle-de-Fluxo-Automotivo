@@ -14,44 +14,20 @@ export class EquipamentoService {
 
   baseUrl = `${environment.apiUrl}/equipamentos`;
 
-  getEquipamentos(params?: any): Observable<Equipamento[]> {
-    let paramsQuery: HttpParams = new HttpParams();
+  getEquipamentos(query?: any): Observable<Equipamento[]> {
+    let params: HttpParams = new HttpParams();
 
-    paramsQuery = paramsQuery.set("limit", params?.limit || 0);
+    params = params.set("limit", query?.limit || 0);
 
-    if (params?.isAtivo !== "qualquer") {
-       paramsQuery = paramsQuery.append(
-         "ativo",
-         params?.isAtivo == "ativo" ? "true" : "false"
-       );
-    }
-
-    if(params?.busca !== "") {
-      switch (params?.filtro) {
-        case "codigo":
-           paramsQuery = paramsQuery.append("codigo", params.busca);
-          break;
-        case "faixa":
-           paramsQuery = paramsQuery.append("faixa", params.busca);
-          break;
-        case "tipo":
-           paramsQuery = paramsQuery.append("tipo", params.busca);
-          break;
-        case "local":
-           paramsQuery = paramsQuery.append("local", params.busca);
-          break;
-        case "marca":
-           paramsQuery = paramsQuery.append("marca", params.busca);
-          break;
-        case "modelo":
-           paramsQuery = paramsQuery.append("modelo", params.busca);
-          break;
-      }
-    }
+    if (query?.codigo) params = params.append("codigo", query.codigo);
+    if (query?.faixa) params = params.append("codigo", query.faixa);
+    if (query?.placa) params = params.append("placa", query.placa);
+    if (query?.integrador) params = params.append("integrador", query.integrador.id);
+    if (query?.ativo) params = params.append("ativo", query.ativo);
     
-    return this.HttpClient.get<Equipamento[]>(this.baseUrl, {
-      params: paramsQuery,
-    });
+      return this.HttpClient.get<Equipamento[]>(this.baseUrl, {
+        params: params,
+      });
   }
 
   getEquipamento(id: number, limite?: number): Observable<Equipamento> {

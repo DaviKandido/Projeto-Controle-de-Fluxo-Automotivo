@@ -88,34 +88,17 @@ export class FluxoListComponent implements OnInit {
 
   ngOnInit(): void {
     this._routerActived.queryParams.subscribe((params) => {
-      this.codigo = params["codigo"];
-      this.faixa = params["faixa"];
-      this.placa = params["placa"];
-      this.dataInicio = params["dataInicio"];
-      this.dataFim = params["dataFim"];
-      this.horaInicio = params["horaInicio"];
-      this.horaFim = params["horaFim"];
 
-      this._fluxosService
-        .getFluxos({
-          codigo: this.codigo,
-          faixa: this.faixa,
-          placa: this.placa,
-          dataInicio: this.dataInicio,
-          dataFim: this.dataFim,
-          horaInicio: this.horaInicio,
-          horaFim: this.horaFim,
-        })
-        .subscribe(
-          (fluxos) => {
-            this.fluxos = fluxos;
-          },
-          (err: any) => {
-            this.error = err;
-            alert(err);
-            console.log(err);
-          }
-        );
+      this._fluxosService.getFluxos(params).subscribe(
+        (fluxos) => {
+          this.fluxos = fluxos;
+        },
+        (err: any) => {
+          this.error = err;
+          alert(err);
+          console.log(err);
+        }
+      );
     });
   }
 }

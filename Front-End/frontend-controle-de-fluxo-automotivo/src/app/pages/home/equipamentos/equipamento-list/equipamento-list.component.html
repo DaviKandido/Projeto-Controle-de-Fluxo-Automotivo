@@ -9,7 +9,6 @@
       <div class="card">
         <div class="card-header h5">Filtro de equipamentos:</div>
         <div class="card-body">
-
           <div class="form-group">
             <label for="codigo">Codigo</label>
             <input
@@ -32,7 +31,7 @@
               [(ngModel)]="faixa"
               #faixaModel="ngModel"
             >
-              <option [value]="null" selected>Qualquer</option>
+              <option [ngValue]="null" selected>Qualquer</option>
               <option [value]="1">1</option>
               <option [value]="2">2</option>
               <option [value]="3">3</option>
@@ -40,9 +39,31 @@
             </select>
           </div>
 
+          <div class="form-group">
+            <!-- Integrador -->
+            <label for="faixa">Integrador do equipamento:</label>
+            <ng-select
+              name="integrador"
+              id="integrador"
+              class="form-control"
+              [(ngModel)]="integrador"
+              #integradorModel="ngModel"
+              [items]="integradores"
+              bindLabel="nome"
+              bindValue="id"
+              [searchable]="true"
+              [clearable]="true"
+              notFoundText="Nenhum Integrador Encontrado"
+            >
+            </ng-select>
+          </div>
+
           <div class="text-muted text-center">Filtro de status:</div>
-          <div class="btn-group btn-group-toggle mt-4 d-flex" data-toggle="buttons">
-            <label class="btn btn-secondary active">
+          <div
+            class="row btn-group btn-group-toggle mt-4 d-flex"
+            data-toggle="buttons"
+          >
+            <label class="col-md-4 btn btn-secondary active">
               <input
                 type="radio"
                 id="Qualquer"
@@ -54,7 +75,7 @@
               />
               Qualquer
             </label>
-            <label class="btn btn-success">
+            <label class="col-md-4 btn btn-success">
               <input
                 type="radio"
                 id="ativo"
@@ -65,7 +86,7 @@
               />
               Ativos
             </label>
-            <label class="btn btn-danger">
+            <label class="col-md-4 btn btn-danger">
               <input
                 type="radio"
                 id="Inativos"
@@ -99,10 +120,12 @@
       </div>
     </form>
 
-    <div *ngFor="let equipamento of equipamentos" class="col-md mb-5">
-      <app-display-equipamento
-        [equipamento]="equipamento"
-      ></app-display-equipamento>
+    <div class="col-md">
+      <div *ngFor="let equipamento of equipamentos" class="mb-4">
+        <app-display-equipamento
+          [equipamento]="equipamento"
+        ></app-display-equipamento>
+      </div>
     </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Equipamento } from "src/app/models/equipamento.model";
 import { EquipamentoService } from "src/app/services/equipamento.service";
+import { IntegradorService } from 'src/app/services/integrador.service';
 
 @Component({
   selector: "app-equipamento-list",
@@ -77,7 +78,8 @@ export class EquipamentoListComponent implements OnInit {
   constructor(
     private _router: Router,
     private _routeActivated: ActivatedRoute,
-    private _equipamentoService: EquipamentoService
+    private _equipamentoService: EquipamentoService,
+    private _integradorService: IntegradorService
   ) {
     const resolveData: Equipamento[] | string =
       this._routeActivated.snapshot.data["equipamentoList"];
@@ -87,12 +89,20 @@ export class EquipamentoListComponent implements OnInit {
       this.error = resolveData;
       alert(resolveData);
     }
+
+    this._integradorService.getIntegradores().subscribe((data: Integrador[]) =>{
+      this.integradores = data
+    }, (err: any) => {
+      console.log(err);
+    });
   }
 
-  codigo: string = "";
-  faixa: number = 0;
+  integradores: Integrador[];
+
+  codigo: string;
+  faixa: number;
   integrador: Integrador;
-  ativo: boolean = null;
+  ativo: boolean;
 
   onFilterChange() {
     this._router.navigate([], {
@@ -118,7 +128,6 @@ export class EquipamentoListComponent implements OnInit {
 
       this._equipamentoService.getEquipamentos(params).subscribe(
         (equipamentos) => {
-          console.log(equipamentos);
           this.equipamentos = equipamentos;
         },
         (error: any) => console.log(error)

@@ -16,7 +16,7 @@
         <div class="text-md-center mb-2">Dados Tecnicos:</div>
         <ul>
         <li><span class="text-muted mr-2">Data de Recebimento:</span> {{ fluxo.dataRecebimento || "N/A" }}</li>
-        <li><span class="text-muted mr-2">Visualizar Equipmaentos: </span>
+        <li><span class="text-muted mr-2">Visualizar Equipamento - {{ fluxo.Equipamento.codigo || "N/A"}}: </span>
             <a class="btn btn-danger" [routerLink]="['/home/equipamentos', fluxo.equipamentoId]">Buscar Equipamentos</a>
         </li>
         </ul>

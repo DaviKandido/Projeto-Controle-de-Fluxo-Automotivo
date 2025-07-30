@@ -1,3 +1,4 @@
+import { Fluxo } from "./fluxo.model";
 import { Integrador } from "./integrador.model";
 import { Municipio } from "./municipio.model";
 
@@ -20,5 +21,5 @@ export class Equipamento {
   municipioId!: number;
   Integrador?: Integrador;
   Municipio?: Municipio;
-  Fluxos?: object;
+  Fluxos?: Fluxo[];
 }
