@@ -24,6 +24,7 @@ import { FluxoService } from './services/fluxo.service';
 import { FluxoListResolverService } from './services/fluxo-list-resolver.service';
 import { IntegradorService } from './services/integrador.service';
 import { DisplayFluxoComponent } from './pages/home/fluxos/display-fluxo/display-fluxo.component';
+import { AnaliseDeFluxosComponent } from './pages/home/fluxos/analise-de-fluxos/analise-de-fluxos.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { DisplayFluxoComponent } from './pages/home/fluxos/display-fluxo/display
     CreateEquipamentoComponent,
     FluxoListComponent,
     DisplayFluxoComponent,
+    AnaliseDeFluxosComponent,
   ],
   imports: [
     BrowserModule,

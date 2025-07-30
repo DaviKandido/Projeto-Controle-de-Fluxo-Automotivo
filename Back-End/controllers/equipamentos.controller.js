@@ -2,6 +2,7 @@ const models = require("../models");
 const Validator = require("fastest-validator");
 const { Op } = require("sequelize");
 const moment = require("moment");
+const fluxosController = require("./fluxos.controller");
 
 function index(req, res) {
   // Extrai e converte o limit, se existir
@@ -70,7 +71,8 @@ function index(req, res) {
     });
 }
 
-function show(req, res) {
+
+async function show(req, res) {
   const id = req.params.id;
 
   const whereFluxos = {};
@@ -99,10 +101,7 @@ function show(req, res) {
   const limit = req.query.limit ? parseInt(req.query.limit) : null;
   delete req.query.limit;
 
-  const include = [
-    {model: models.Integrador},
-    {model: models.Municipio},
-  ]
+  const include = [{ model: models.Integrador }, { model: models.Municipio }];
 
   if (limit && limit > 0) {
     include.push({
@@ -117,7 +116,8 @@ function show(req, res) {
   models.Equipamento.findByPk(id, {
     include: include,
   })
-    .then((result) => {
+    .then(async (result) => {
+
       if (result) {
         res.status(200).json(result);
       } else {
@@ -144,9 +144,13 @@ function save(req, res) {
     marca: req.body.marca,
     modelo: req.body.modelo,
     velocidadeLimite: req.body.velocidadeLimite,
-    dataAfericao: moment.tz(req.body.dataAfericao, "America/Sao_Paulo").toDate(),
+    dataAfericao: moment
+      .tz(req.body.dataAfericao, "America/Sao_Paulo")
+      .toDate(),
     lacre: req.body.lacre,
-    dataRegistroInmetro: req.body.dataRegistroInmetro ? moment.tz(req.body.dataRegistroInmetro, "America/Sao_Paulo").toDate() : null,
+    dataRegistroInmetro: req.body.dataRegistroInmetro
+      ? moment.tz(req.body.dataRegistroInmetro, "America/Sao_Paulo").toDate()
+      : null,
     numeroInmetro: req.body.numeroInmetro,
     integradorId: req.body.integradorId,
     municipioId: req.body.municipioId,
@@ -209,9 +213,13 @@ async function update(req, res) {
     marca: req.body.marca,
     modelo: req.body.modelo,
     velocidadeLimite: req.body.velocidadeLimite,
-    dataAfericao: moment.tz(req.body.dataAfericao, "America/Sao_Paulo").toDate(),
+    dataAfericao: moment
+      .tz(req.body.dataAfericao, "America/Sao_Paulo")
+      .toDate(),
     lacre: req.body.lacre,
-    dataRegistroInmetro: req.body.dataRegistroInmetro ? moment.tz(req.body.dataRegistroInmetro, "America/Sao_Paulo").toDate() : null,
+    dataRegistroInmetro: req.body.dataRegistroInmetro
+      ? moment.tz(req.body.dataRegistroInmetro, "America/Sao_Paulo").toDate()
+      : null,
     numeroInmetro: req.body.numeroInmetro,
     integradorId: req.body.integradorId,
     municipioId: req.body.municipioId,
@@ -266,15 +274,18 @@ async function update(req, res) {
 
     await models.Equipamento.update(equipamentoUpdate, { where: { id } });
 
-    return res.status(200).json({
-      message: "Equipamento atualizado com sucesso",
-      equipamento: { id, ...equipamentoUpdate },
-    }).catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível atualizar o equipamento",
-        error: err,
+    return res
+      .status(200)
+      .json({
+        message: "Equipamento atualizado com sucesso",
+        equipamento: { id, ...equipamentoUpdate },
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Não foi possível atualizar o equipamento",
+          error: err,
+        });
       });
-    });
   } catch (err) {
     return res.status(500).json({
       message: "Não foi possível atualizar o equipamento",

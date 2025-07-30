@@ -4,7 +4,7 @@
       #formFilter="ngForm"
       method="get"
       class="col-md-3 mb-5"
-      (submit)="onFilterChange()"
+      (change)="onFilterChange()"
     >
       <div class="card">
         <div class="card-header h5">Filtro de equipamentos:</div>
@@ -32,10 +32,10 @@
               #faixaModel="ngModel"
             >
               <option [ngValue]="null" selected>Qualquer</option>
-              <option [value]="1">1</option>
-              <option [value]="2">2</option>
-              <option [value]="3">3</option>
-              <option [value]="4">4</option>
+              <option [ngValue]="1">1</option>
+              <option [ngValue]="2">2</option>
+              <option [ngValue]="3">3</option>
+              <option [ngValue]="4">4</option>
             </select>
           </div>
 
@@ -60,10 +60,10 @@
 
           <div class="text-muted text-center">Filtro de status:</div>
           <div
-            class="row btn-group btn-group-toggle mt-4 d-flex"
+            class="row btn-group btn-group-toggle mt-4 d-flex mx-1"
             data-toggle="buttons"
           >
-            <label class="col-md-4 btn btn-secondary active">
+            <label class="col-md-4 btn btn-outline-secondary active">
               <input
                 type="radio"
                 id="Qualquer"
@@ -75,7 +75,7 @@
               />
               Qualquer
             </label>
-            <label class="col-md-4 btn btn-success">
+            <label class="col-md-4 btn btn-outline-success">
               <input
                 type="radio"
                 id="ativo"
@@ -86,7 +86,7 @@
               />
               Ativos
             </label>
-            <label class="col-md-4 btn btn-danger">
+            <label class="col-md-4 btn btn-outline-danger">
               <input
                 type="radio"
                 id="Inativos"
@@ -102,15 +102,8 @@
         <div class="card-footer">
           <div class="d-flex flex-row justify-content-between">
             <button
-              type="submit"
-              class="btn btn-primary"
-              [disabled]="!formFilter.valid"
-            >
-              Filtrar
-            </button>
-            <button
               type="button"
-              class="btn btn-danger"
+              class="btn btn-secondary"
               (click)="clearFilters()"
             >
               Limpar filtros

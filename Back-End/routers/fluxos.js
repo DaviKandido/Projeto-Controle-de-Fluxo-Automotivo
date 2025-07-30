@@ -6,6 +6,9 @@ router.get("/", checkAuthMiddleware.checkAuth, fluxosController.index);
 
 router.get("/:id", checkAuthMiddleware.checkAuth, fluxosController.show);
 
+router.get("/count/:id_equipamento", checkAuthMiddleware.checkAuth, fluxosController.showCount);
+
+
 // router.post("/", fluxosController.save);
 
 // router.put("/:id", fluxosController.update);

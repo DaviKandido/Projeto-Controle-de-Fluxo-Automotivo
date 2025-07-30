@@ -1,7 +1,7 @@
 const models = require("../models");
 const { Op } = require("sequelize");
 
-function index(req, res) {
+async function index(req, res) {
   // Extrai e converte o limit, se existir
   const limit = req.query.limit ? parseInt(req.query.limit) : null;
   delete req.query.limit;
@@ -47,7 +47,6 @@ function index(req, res) {
     ],
   })
     .then((result) => {
-
       if (!result) {
         res.status(404).json({
           message: "Fluxos não encontrados",
@@ -84,6 +83,61 @@ function show(req, res) {
     });
 }
 
+
+function showCount(req, res) {
+  const id_equipamento = req.params.id_equipamento;
+
+  const whereFluxos = {};
+  if (req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
+
+  if (req.query.dataInicio !== undefined || req.query.dataFim !== undefined) {
+    whereFluxos.data = {};
+    if (req.query.dataInicio !== undefined) {
+      whereFluxos.data[Op.gte] = req.query.dataInicio;
+    }
+    if (req.query.dataFim !== undefined) {
+      whereFluxos.data[Op.lte] = req.query.dataFim;
+    }
+  }
+
+  if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
+    whereFluxos.hora = {};
+    if (req.query.horaInicio !== undefined) {
+      whereFluxos.hora[Op.gte] = req.query.horaInicio;
+    }
+    if (req.query.horaFim !== undefined) {
+      whereFluxos.hora[Op.lte] = req.query.horaFim;
+    }
+  }
+
+
+  models.Fluxo.count({
+    where: { ...whereFluxos },
+    include: [
+      {
+        model: models.Equipamento,
+        where: { id: id_equipamento },
+      },
+    ]
+  })
+    .then((result) => {
+      if (typeof result === "number") {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({
+          message: "Fluxos por equipamento não encontrado",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Não foi possível obter a contagem de fluxos por equipamento",
+        error: err,
+      });
+    });
+}
+
+
 // Fluxo virão de um equipamento externo
 // function save(req, res) { }
 // async function update(req, res) { }
@@ -112,6 +166,7 @@ function destroy(req, res) {
 module.exports = {
   index: index,
   show: show,
+  showCount: showCount,
   // save: save,
   // update: update,
   destroy: destroy,

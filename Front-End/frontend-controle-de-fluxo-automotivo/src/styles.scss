@@ -11,10 +11,16 @@
   font-style: normal !important;
 }
 
-body {
+.dark {
   background-color: #3b3b3b;
   color: white;
 }
+
+.ligth {
+  background-color: #ffffff;
+  color: #3b3b3b;
+}
+
 
 .ng-select{
     @extend .form-control;

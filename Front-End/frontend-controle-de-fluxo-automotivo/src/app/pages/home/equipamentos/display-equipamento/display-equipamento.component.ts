@@ -13,18 +13,9 @@ export class DisplayEquipamentoComponent implements OnInit {
   constructor(private _equipamentoService: EquipamentoService) {}
 
   ngOnInit(): void {}
+  modal: boolean = false
 
-  deleteEq(Equipamento: Equipamento) {
-    if (confirm("Deseja realmente deletar o equipamento?")) {
-      this._equipamentoService.deleteEquipamento(Equipamento).subscribe(
-        () => {
-          alert("Equipamento deletado com sucesso!");
-          window.location.reload();
-        },
-        (err) => {
-          alert(`Erro ao deletar: ${err.error.message}`);
-        }
-      );
-    }
+  abrirModal(){
+    this.modal = !this.modal
   }
 }

@@ -9,6 +9,7 @@ import { CreateEquipamentoComponent } from "./pages/home/equipamentos/create-equ
 import { CanDeactivateCreateEquipamentoComponentService } from "./services/can-deactivate-create-equipamento-component.service";
 import { FluxoListComponent } from "./pages/home/fluxos/fluxo-list/fluxo-list.component";
 import { FluxoListResolverService } from "./services/fluxo-list-resolver.service";
+import { AnaliseDeFluxosComponent } from "./pages/home/fluxos/analise-de-fluxos/analise-de-fluxos.component";
 
 const routes: Routes = [
   {
@@ -39,8 +40,15 @@ const routes: Routes = [
         path: "fluxos",
         component: FluxoListComponent,
         resolve: {
-          FluxoList: FluxoListResolverService
-        }
+          FluxoList: FluxoListResolverService,
+        },
+      },
+      {
+        path: "fluxos/analise-de-fluxos",
+        component: AnaliseDeFluxosComponent,
+        resolve: {
+          equipamentoList: EquipamentoListResolverServiceService,
+        },
       },
     ],
   },

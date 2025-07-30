@@ -178,4 +178,18 @@ export class CreateEquipamentoComponent implements OnInit {
       );
     }
   }
+
+  deleteEq(Equipamento: Equipamento) {
+    if (confirm("Deseja realmente deletar o equipamento?")) {
+      this._equipamentoService.deleteEquipamento(Equipamento).subscribe(
+        () => {
+          alert("Equipamento deletado com sucesso!");
+          window.location.reload();
+        },
+        (err) => {
+          alert(`Erro ao deletar: ${err.error.message}`);
+        }
+      );
+    }
+  }
 }

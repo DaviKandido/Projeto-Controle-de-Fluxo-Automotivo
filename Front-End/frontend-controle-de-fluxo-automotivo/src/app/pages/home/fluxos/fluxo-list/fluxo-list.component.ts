@@ -89,16 +89,17 @@ export class FluxoListComponent implements OnInit {
   ngOnInit(): void {
     this._routerActived.queryParams.subscribe((params) => {
 
-      this._fluxosService.getFluxos(params).subscribe(
-        (fluxos) => {
-          this.fluxos = fluxos;
-        },
-        (err: any) => {
-          this.error = err;
-          alert(err);
-          console.log(err);
-        }
-      );
+        this.codigo = params["codigo"];
+          this._fluxosService.getFluxos(params).subscribe(
+            (fluxos) => {
+              this.fluxos = fluxos;
+            },
+            (err: any) => {
+              this.error = err;
+              alert(err);
+              console.log(err);
+            }
+          );
     });
   }
 }

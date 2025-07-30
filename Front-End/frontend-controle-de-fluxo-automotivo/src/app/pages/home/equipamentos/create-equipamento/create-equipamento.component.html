@@ -322,8 +322,9 @@
       </div>
     </div>
 
-    <div class="card-footer">
+    <div class="card-footer d-flex flex-row justify-content-between">
       <button type="submit" class="btn btn-orangeModify" [disabled]="equipamentoForm.invalid">Salvar</button>
+      <button type="button" class="btn btn-delete" *ngIf="equipamento.id" (click)="deleteEq(equipamento)">Deletar</button>
     </div>
   </div>
 </form>

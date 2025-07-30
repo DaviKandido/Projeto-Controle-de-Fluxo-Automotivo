@@ -1,9 +1,9 @@
 <div>
   <div class="row">
-    <form #formFilter="ngForm" method="get" class="col-md-3 mb-4" (submit)="onFilterChange()">
+    <form #formFilter="ngForm" method="get" class="col-md-3 mb-4" (change)="onFilterChange()">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title">Filtros:</h5>
+          <h5 class="card-title">Filtros de fluxos:</h5>
         </div>
         <div class="card-body">
           <!-- código do equipamento -->
@@ -58,7 +58,7 @@
                 name="dataInicio"
                 id="dataInicio"
                 class="form-control"
-                [(ngModel)]="horaInicio"
+                [(ngModel)]="dataInicio"
                 #dataInicioModel="ngModel"
               />
             </div>
@@ -104,8 +104,7 @@
         </div>
         <div class="card-footer">
           <div class="d-flex flex-row justify-content-between">
-            <button type="submit" class="btn btn-primary" [disabled]="!formFilter.valid">Filtrar</button>
-            <button type="button" class="btn btn-danger" (click)="clearFilters()">Limpar filtros</button>
+            <button type="button" class="btn btn-secondary" (click)="clearFilters()">Limpar filtros</button>
           </div>
         </div>
       </div>

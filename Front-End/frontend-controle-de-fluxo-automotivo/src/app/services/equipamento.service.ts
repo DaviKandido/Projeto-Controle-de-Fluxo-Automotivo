@@ -20,7 +20,7 @@ export class EquipamentoService {
     params = params.set("limit", query?.limit || 0);
 
     if (query?.codigo) params = params.append("codigo", query.codigo);
-    if (query?.faixa) params = params.append("codigo", query.faixa);
+    if (query?.faixa) params = params.append("faixa", query.faixa);
     if (query?.placa) params = params.append("placa", query.placa);
     if (query?.integrador) params = params.append("integrador", query.integrador.id);
     if (query?.ativo) params = params.append("ativo", query.ativo);

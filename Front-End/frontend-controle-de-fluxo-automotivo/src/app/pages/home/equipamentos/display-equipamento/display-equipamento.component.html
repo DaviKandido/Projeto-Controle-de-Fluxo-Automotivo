@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" (click)="abrirModal()" [class.clickable]="modal">
   <div class="card-header h5">
     <div class="d-flex flex-row justify-content-between mx-4">
       <div>
@@ -36,11 +36,10 @@
       </div>
     </div>
   </div>
-  <div class="mouseover m-2">
-      <div class="d-flex flex-row justify-content-around">
-        <button type="button" class="btn btn-lg btn-info" [routerLink]="['/home/equipamentos', equipamento.id]">Visualizar</button>
-        <button type="button" class="btn btn-lg btn-warning" [routerLink]="['/home/edit/equipamentos', equipamento.id]">Atualizar</button>
-        <button type="button" class="btn btn-lg btn-danger" (click)="deleteEq(equipamento)">Deletar</button>
+  <div class="mouseover m-2" *ngIf="modal">
+      <div >
+        <button type="button" class="btn btn-info mr-2" [routerLink]="['/home/equipamentos', equipamento.id]">Visualizar detalhes</button>
+        <button type="button" class="btn btn-warning" [routerLink]="['/home/edit/equipamentos', equipamento.id]">Gerenciar equipamento</button>
       </div>
   </div>
 </div>

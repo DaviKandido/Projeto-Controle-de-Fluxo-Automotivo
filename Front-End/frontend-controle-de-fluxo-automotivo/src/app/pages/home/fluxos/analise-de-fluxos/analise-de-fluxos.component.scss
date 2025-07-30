@@ -1,13 +1,16 @@
-.clickable {
-  background-color: #e37761 !important;
-  color: white !important;
-  .text-muted {
-    color: #dbdbdb !important;
-  }
+table{
+    color: white;
+    border: 1.5px solid white;
 }
+
 
 .card {
   color: #434343;
+
+  .mouseover {
+    display: none;
+  }
+
   &:hover {
     background-color: #707070;
     color: white;
@@ -45,4 +48,21 @@ ul {
   &::after {
     content: "🔴";
   }
+}
+
+option {
+  color: #434343;
+}
+
+.link{
+    color: #E37761;
+    font-weight: bold;
+}
+
+.thead{
+    background-color: #E37761;
+}
+
+.bg{
+    background-color: #434343;
 }

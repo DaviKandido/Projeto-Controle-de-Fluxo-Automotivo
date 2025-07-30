@@ -4,7 +4,7 @@ import { Municipio } from "./municipio.model";
 
 
 export class Equipamento {
-  id?: string | number;
+  id?: number;
   codigo!: string;
   faixa!: number;
   tipo!: string;
@@ -19,6 +19,7 @@ export class Equipamento {
   numeroInmetro!: string;
   integradorId!: number;
   municipioId!: number;
+  countFluxos?: number;
   Integrador?: Integrador;
   Municipio?: Municipio;
   Fluxos?: Fluxo[];
