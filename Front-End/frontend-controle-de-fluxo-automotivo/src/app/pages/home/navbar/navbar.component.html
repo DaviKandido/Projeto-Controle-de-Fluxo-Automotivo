@@ -50,15 +50,15 @@
     </ul>
     <div class="row form-inline mr-3">
       <div class="row mx-2">
-        <a class="nav-link nav-modified" (click)="logout()">
-          Sair
+        <a class="nav-link" (click)="logout()">
+          Sair 
           <img src="/assets/images/log-out.png" alt="sair" />
         </a>
       </div>
-      <div (click)="toggleTheme()" *ngIf="theme === 'dark'">
+      <div (click)="toggleTheme()" *ngIf="theme">
         <img src="/assets/images/moon.png" alt="troca Cores" />
       </div>
-      <div (click)="toggleTheme()" *ngIf="theme === 'light'">
+      <div (click)="toggleTheme()" *ngIf="!theme">
         <img src="/assets/images/sun.png" alt="troca Cores" />
       </div>
     </div>

@@ -20,9 +20,9 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  theme: string = "dark";
+  theme: boolean = false;
   toggleTheme() {
-    this.theme = this.theme === "dark" ? "light" : "dark";
-    document.body.classList.toggle(this.theme);
+    this.theme = !this.theme;
+    document.documentElement.setAttribute("data-theme", this.theme ? "dark" : "light");
   }
 }
