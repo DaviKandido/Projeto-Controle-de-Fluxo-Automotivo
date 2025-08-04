@@ -1,0 +1,13 @@
+:root{
+  --color-fonts: #434343;
+  --color-bg-principal: white;
+  --color-bg-secundary: #c8c8c8;
+  --color-nav: #e37761be;
+}
+
+[data-theme="dark"] {
+  --color-fonts: #434343;
+  --color-bg-principal: #3b3b3b;
+  --color-bg-secundary: #434343;
+  --color-nav: #e37761;
+}

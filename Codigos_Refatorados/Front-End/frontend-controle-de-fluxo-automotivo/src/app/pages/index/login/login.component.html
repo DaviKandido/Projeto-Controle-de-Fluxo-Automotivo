@@ -1,0 +1,66 @@
+<form #loginForm="ngForm" (ngSubmit)="loginInit()">
+  <div>
+    <div class="d-flex flex-column align-items-center justify-content-center">
+      <h1 class="text-black">Logar em minha conta</h1>
+      <img src="/assets/images/perfil.png" alt="perfil login" />
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="text-black">Email</label>
+      <input
+        type="text"
+        name="login"
+        class="form-control border-0 w-100"
+        id="login"
+        [(ngModel)]="loginData.login"
+        [class.is-invalid]="login.invalid && login.touched"
+        required
+        #login="ngModel"
+        aria-describedby="login"
+        email
+        placeholder="Digite o seu login..."
+      />
+      <span
+        class="invalid-feedback"
+        *ngIf="login.errors?.required && login.touched"
+      >
+        Email é obrigradória
+      </span>
+      <span class="invalid-feedback" *ngIf="login.errors?.email">
+        Email é invalido
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="password" class="text-black">Senha</label>
+      <input
+        type="password"
+        name="senha"
+        [class.is-invalid]="senha.invalid && senha.touched"
+        class="form-control border-0 w-100"
+        id="senha"
+        required
+        [(ngModel)]="loginData.senha"
+        #senha="ngModel"
+        placeholder="Digite a sua senha..."
+      />
+      <span
+        class="invalid-feedback"
+        *ngIf="senha.errors?.required && senha.touched"
+      >
+        Senha é obrigradória
+      </span>
+    </div>
+
+    <div class="d-flex flex-column align-items-center justify-content-center">
+      <button
+        type="submit"
+        class="btn btn-submit"
+        [disabled]="loginForm.invalid"
+      >
+        Logar
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- {{ loginForm.value | json }} -->

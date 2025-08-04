@@ -1,0 +1,61 @@
+
+.btn-orange{
+    border: 2px solid #E37761;
+    padding: 0.5rem 6rem;
+    color: #E37761;
+    border-radius: 10px;
+    font-weight: bold;
+    &:hover{
+        background-color: #E37761;
+        color: #fff;
+        scale: 1.05;
+    }
+}
+
+.text-orange{
+    color: #E37761;
+    align-items: center;
+    text-align: center;
+}
+
+.border-radios-left{
+    border-radius: 20px 0px 0px 20px;
+}
+
+.border-radios-right{
+    border-radius: 0px 20px 20px 0px;
+}
+
+.card-toggle{
+    height: 95vh;
+    gap: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card-form{
+    background-color: #E37761;
+    height: 95vh;
+    gap: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .black{
+        color: black;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .card-toggle{
+        height: 100vh;
+    }
+    .card-form{
+        height: 100vh;
+    }
+    
+}

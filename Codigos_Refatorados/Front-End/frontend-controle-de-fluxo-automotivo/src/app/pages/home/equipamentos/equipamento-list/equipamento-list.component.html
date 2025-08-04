@@ -1,0 +1,124 @@
+<div>
+  <div class="row">
+    <form
+      #formFilter="ngForm"
+      method="get"
+      class="col-md-3 mb-5"
+      (change)="onFilterChange()"
+    >
+      <div class="card">
+        <div class="card-header h5">Filtro de equipamentos:</div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="codigo">Codigo</label>
+            <input
+              type="text"
+              class="form-control"
+              name="codigo"
+              id="codigo"
+              placeholder="Digite o codigo do equipamento..."
+              [(ngModel)]="codigo"
+              #codigoModel="ngModel"
+            />
+          </div>
+          <div class="form-group">
+            <!-- faixa do equipamento -->
+            <label for="faixa">Faixa do equipamento:</label>
+            <select
+              name="faixa"
+              id="faixa"
+              class="form-control"
+              [(ngModel)]="faixa"
+              #faixaModel="ngModel"
+            >
+              <option [ngValue]="null" selected>Qualquer</option>
+              <option [ngValue]="1">1</option>
+              <option [ngValue]="2">2</option>
+              <option [ngValue]="3">3</option>
+              <option [ngValue]="4">4</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <!-- Integrador -->
+            <label for="faixa">Integrador do equipamento:</label>
+            <ng-select
+              name="integrador"
+              id="integrador"
+              class="form-control"
+              [(ngModel)]="integrador"
+              #integradorModel="ngModel"
+              [items]="integradores"
+              bindLabel="nome"
+              bindValue="id"
+              [searchable]="true"
+              [clearable]="true"
+              notFoundText="Nenhum Integrador Encontrado"
+            >
+            </ng-select>
+          </div>
+
+          <div class="text-muted text-center">Filtro de status:</div>
+          <div
+            class="row btn-group btn-group-toggle mt-4 d-flex mx-1"
+            data-toggle="buttons"
+          >
+            <label class="col-md-4 btn btn-outline-secondary active">
+              <input
+                type="radio"
+                id="Qualquer"
+                checked
+                name="ativo"
+                [value]="null"
+                [(ngModel)]="ativo"
+                #ativoModel="ngModel"
+              />
+              Any
+            </label>
+            <label class="col-md-4 btn btn-outline-success">
+              <input
+                type="radio"
+                id="ativo"
+                [value]="true"
+                name="ativo"
+                [(ngModel)]="ativo"
+                #ativoModel="ngModel"
+              />
+              Ativos
+            </label>
+            <label class="col-md-4 btn btn-outline-danger">
+              <input
+                type="radio"
+                id="Inativos"
+                name="ativo"
+                [value]="false"
+                [(ngModel)]="ativo"
+                #ativoModel="ngModel"
+              />
+              Inativos
+            </label>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="d-flex flex-row justify-content-between">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="clearFilters()"
+            >
+              Limpar filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="col-md">
+      <div *ngFor="let equipamento of equipamentos" class="mb-4">
+        <app-display-equipamento
+          [equipamento]="equipamento"
+        ></app-display-equipamento>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+@import '../../../../variaveis';
+
+.nav-modified{
+    background-color: var(--color-nav);
+    color: #3b3b3b;
+}
+.img-pefil{
+    width: 50px;
+    height: 50px;
+}
+
+.dropdown-modified{
+    background-color: var(--color-nav);
+}
+
+.nav-link{
+    font-weight: bold;
+    color: black;
+}

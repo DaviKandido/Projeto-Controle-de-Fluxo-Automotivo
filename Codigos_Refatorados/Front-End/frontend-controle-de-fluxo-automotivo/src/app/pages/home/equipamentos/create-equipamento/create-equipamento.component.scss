@@ -1,0 +1,32 @@
+.card {
+  color: #434343;
+}
+
+option {
+  color: #434343;
+}
+
+.btn-orangeModify{
+    background-color: #61a0e3;
+    border: 2px solid #61a0e3;
+    padding: 0.5rem 3rem;
+    color: #fff;
+    border-radius: 10px;
+    font-weight: bold;
+    &:hover{
+        background-color: #fff;
+        color: #61a0e3;
+        scale: 1.05;
+    }
+}
+
+.btn-delete{
+  @extend .btn-orangeModify;
+  background-color: #e37761;
+  border: 2px solid #e37761;
+  &:hover{
+        background-color: #fff;
+        color: #e37761;
+        scale: 1.05;
+    }
+}

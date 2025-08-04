@@ -1,0 +1,47 @@
+<div class="card" (click)="abrirModal()" [class.clickable]="modal">
+  <div class="card-header h5">
+    <div class="d-flex flex-row justify-content-between mx-4">
+      <div>
+        <span class="text-muted">Equipamento: </span> {{ equipamento.modelo }} -
+        {{ equipamento.marca }}
+      </div>
+      <div
+        [class.active]="equipamento.ativo"
+        [class.inactive]="!equipamento.ativo"
+      >
+        <span class="text-muted">Status: </span>
+        {{ equipamento.ativo ? "Ativo" : "Inativo" }}
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">
+      <span class="text-muted ml-4 mr-2">Codigo: </span>
+      {{ equipamento.codigo || "N/A" }}
+    </h5>
+  </div>
+  <div class="card-footer">
+    <div class="d-flex flex-row justify-content-between mx-4">
+      <div>
+        <span class="text-muted mr-2">Integrador: </span>
+        {{ equipamento.Integrador["nome"] || "N/A" }}
+      </div>
+      <div>
+        <span class="text-muted mr-2">Municipio: </span>
+        {{ equipamento.Municipio["descricao"] || "N/A" }} - {{ equipamento.Municipio["uf"] || "N/A" }} - {{ equipamento.Municipio["codigo"] || "N/A" }}
+      </div>
+      <div>
+        <span class="text-muted mr-2">Local: </span>
+        {{ equipamento.local || "N/A" }}
+      </div>
+    </div>
+  </div>
+  <div class="mouseover m-2" *ngIf="modal">
+      <div >
+        <button type="button" class="btn btn-info mr-2" [routerLink]="['/home/equipamentos', equipamento.id]">Visualizar detalhes</button>
+        <button type="button" class="btn btn-warning" [routerLink]="['/home/edit/equipamentos', equipamento.id]">Gerenciar equipamento</button>
+      </div>
+  </div>
+</div>
+
+

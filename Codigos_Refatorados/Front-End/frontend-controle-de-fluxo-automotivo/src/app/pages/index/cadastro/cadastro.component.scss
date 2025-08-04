@@ -1,0 +1,17 @@
+.text-black {
+  color: black;
+  font-weight: bold;
+}
+
+.btn-submit {
+  color: #e37761;
+  background-color: #3b3b3b;
+  border-radius: 10px;
+  font-weight: bold;
+  width: 30%;
+  &:hover {
+    background-color: #fff;
+    color: #e37761;
+    scale: 1.05;
+  }
+}

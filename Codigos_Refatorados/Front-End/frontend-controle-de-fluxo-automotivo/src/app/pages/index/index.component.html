@@ -1,0 +1,41 @@
+<main>
+  <div class="row m-5 align-items-center card-page">
+    <div
+      class="col-md-6 card-form"
+      *ngIf="select == 'Login'"
+      [class.border-radios-left]="select == 'Login'"
+    >
+      <app-login></app-login>
+    </div>
+
+    <div
+      class="col-md-6 bg-white p-5 px-5 card-toggle"
+      [class.border-radios-right]="select == 'Login'"
+      [class.border-radios-left]="select == 'Cadastro'"
+    >
+      <img
+        src="/assets/images/gctLogo.jpeg"
+        alt="logo"
+        class="img-fluid h-50"
+      />
+      <p class="font-weight-bold h5 text-orange">
+        Inovação e Tecnologia a Serviço da <br />
+        Mobilidade Urbana e da Segurança Viária
+      </p>
+      <button class="btn btn-orange" type="button" (click)="toggleSelect()">
+        {{ select == "Login" ? "Cadastre-se" : "Login" }}
+      </button>
+    </div>
+
+    <div
+      class="col-md-6 card-form"
+      *ngIf="select == 'Cadastro'"
+      [class.border-radios-right]="select == 'Cadastro'"
+    >
+      <app-cadastro
+        [select]="select"
+        (selectChange)="select = $event"
+      ></app-cadastro>
+    </div>
+  </div>
+</main>

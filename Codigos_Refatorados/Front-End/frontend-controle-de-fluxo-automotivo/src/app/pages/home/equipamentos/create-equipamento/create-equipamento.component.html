@@ -1,0 +1,333 @@
+<form #equipamentoForm="ngForm" method="post" (ngSubmit)="saveEquipamento()">
+  <div class="card">
+    <div class="card-header h5">Cadastro de Equipamentos</div>
+    <div class="card-body">
+      <div class="row">
+        <!-- CODIGO -->
+        <div class="form-group col-md-4">
+          <label for="codigo">Codigo: </label>
+          <input
+            type="text"
+            id="codigo"
+            name="codigo"
+            class="form-control"
+            placeholder="Digite o codigo do equipamento..."
+            maxlength="11"
+            required
+            [(ngModel)]="equipamento.codigo"
+            #codigo="ngModel"
+            [class.is-invalid]="codigo.invalid && codigo.touched"
+          />
+          <span class="invalid-feedback" *ngIf="codigo.errors?.required && codigo.touched">
+            Codigo é obrigradório
+          </span>
+        </div>
+
+        <!-- FAIXA -->
+        <div class="form-group col-md-4">
+          <label for="faixa">Faixa: </label>
+          <input
+            type="number"
+            id="faixa"
+            name="faixa"
+            class="form-control"
+            max="127"
+            min="1"
+            placeholder="Digite a faixa do equipamento..."
+            required
+            [(ngModel)]="equipamento.faixa"
+            #faixa="ngModel"
+            [class.is-invalid]="faixa.invalid && faixa.touched"
+          />
+          <span class="invalid-feedback" *ngIf="faixa.errors?.required && faixa.touched">
+            Faixa do equipamento é obrigradório
+          </span>
+        </div>
+
+        <!-- TIPO -->
+        <div class="form-group col-md-4">
+          <label for="tipo">Tipo: </label>
+          <select
+            name="tipo"
+            id="tipo"
+            class="form-control"
+            required
+            [(ngModel)]="equipamento.tipo"
+            #tipo="ngModel"
+            [class.is-invalid]="tipo.invalid && tipo.touched"
+          >
+            <option [ngValue]="null" disabled>Selecione o tipo</option>
+            <option value="CEV">CEV</option>
+            <option value="REV">REV</option>
+            <option value="CEM">CEM</option>
+          </select>
+          <span class="invalid-feedback" *ngIf="tipo.errors?.required && tipo.touched">
+            Tipo é obrigradório
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- LOCAL -->
+        <div class="form-group col-md-5">
+          <label for="local">Local: </label>
+          <input
+            type="text"
+            id="local"
+            name="local"
+            class="form-control"
+            placeholder="Digite o local do equipamento..."
+            maxlength="80"
+            required
+            [(ngModel)]="equipamento.local"
+            #local="ngModel"
+            [class.is-invalid]="local.invalid && local.touched"
+          />
+          <span class="invalid-feedback" *ngIf="local.errors?.required && local.touched">
+            Local do equipamento é obrigradório
+          </span>
+        </div>
+
+        <!-- MARCA -->
+        <div class="form-group col-md-4">
+          <label for="marca">Marca: </label>
+          <input
+            type="text"
+            id="marca"
+            name="marca"
+            class="form-control"
+            placeholder="Digite a marca do equipamento..."
+            maxlength="40"
+            required
+            [(ngModel)]="equipamento.marca"
+            #marca="ngModel"
+            [class.is-invalid]="marca.invalid && marca.touched"
+          />
+          <span class="invalid-feedback" *ngIf="marca.errors?.required && marca.touched">
+            Marca do equipamento é obrigradório
+          </span>
+        </div>
+
+        <!-- MODELO -->
+        <div class="form-group col-md-3">
+          <label for="modelo">Modelo: </label>
+          <input
+            type="text"
+            id="modelo"
+            name="modelo"
+            class="form-control"
+            placeholder="Digite o modelo do equipamento..."
+            maxlength="40"
+            required
+            [(ngModel)]="equipamento.modelo"
+            #modelo="ngModel"
+            [class.is-invalid]="modelo.invalid && modelo.touched"
+          />
+          <span class="invalid-feedback" *ngIf="modelo.errors?.required && modelo.touched">
+            Modelo do equipamento é obrigradório
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- VELOCIDADE LIMITE -->
+        <div class="form-group col-md-2">
+          <label for="velocidadeLimite">Velocidade Limite: </label>
+          <input
+            type="number"
+            id="velocidadeLimite"
+            name="velocidadeLimite"
+            class="form-control"
+            placeholder="Digite a velocidade limite do equipamento..."
+            min="0"
+            [(ngModel)]="equipamento.velocidadeLimite"
+            #velocidadeLimite="ngModel"
+            [class.is-invalid]="velocidadeLimite.invalid && velocidadeLimite.touched"
+          />
+          <span class="invalid-feedback" *ngIf="velocidadeLimite.errors?.required && velocidadeLimite.touched">
+            Velocidade limite do equipamento é obrigradório
+          </span>
+        </div>
+
+        <!-- DATA DE AFERIÇÃO -->
+        <div class="form-group col-md-2">
+          <label for="dataAfericao">Data de Aferição: </label>
+          <input
+            type="date"
+            id="dataAfericao"
+            name="dataAfericao"
+            class="form-control"
+            required
+            [(ngModel)]="equipamento.dataAfericao"
+            #dataAfericao="ngModel"
+            [class.is-invalid]="dataAfericao.invalid && dataAfericao.touched"
+          />
+          <span class="invalid-feedback" *ngIf="dataAfericao.errors?.required && dataAfericao.touched">
+            Data de aferição do equipamento é obrigradório
+          </span>
+        </div>
+
+        <!-- LACRE -->
+        <div class="form-group col-md-4">
+          <label for="lacre">Lacre: </label>
+          <input
+            type="text"
+            id="lacre"
+            name="lacre"
+            class="form-control"
+            placeholder="Digite o lacre do equipamento..."
+            maxlength="20"
+            required
+            [(ngModel)]="equipamento.lacre"
+            #lacre="ngModel"
+            [class.is-invalid]="lacre.invalid && lacre.touched"
+          />
+          <span class="invalid-feedback" *ngIf="lacre.errors?.required && lacre.touched">
+            Lacre do equipamento é obrigradório
+          </span>
+        </div>
+
+        <!-- ATIVO -->
+        <div class="form-groupt">
+          <label for="ativo" class="text-nowrap">Esta Ativo: </label>
+          <input
+            type="checkbox"
+            id="ativo"
+            name="ativo"
+            class="form-control"
+            [required]="equipamento.ativo == null"
+            [(ngModel)]="equipamento.ativo"
+            #ativo="ngModel"
+            [class.is-invalid]="ativo.invalid && ativo.touched"
+          />
+          <span class="invalid-feedback" *ngIf="ativo.errors?.required && ativo.touched">
+            Se equipamento esta ativo do equipamento é obrigradório
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- NUMERO INMETRO -->
+        <div class="form-group col-md-4">
+          <label for="numeroInmetro">Numero Inmetro: </label>
+          <input
+            type="text"
+            id="numeroInmetro"
+            name="numeroInmetro"
+            class="form-control"
+            placeholder="Digite o numero inmetro do equipamento..."
+            maxlength="30"
+            [(ngModel)]="equipamento.numeroInmetro"
+            #numeroInmetro="ngModel"
+            [class.is-invalid]="numeroInmetro.invalid && numeroInmetro.touched"
+          />
+          <span class="invalid-feedback" *ngIf="numeroInmetro.errors?.required && numeroInmetro.touched">
+            Numero Inmetro é obrigradória
+          </span>
+          <span class="invalid-feedback" *ngIf="numeroInmetro.errors?.maxlength && numeroInmetro.touched">
+            Numero Inmetro deve ter no máximo 30 caracteres
+          </span>
+        </div>
+
+          <!-- DATA DE REGISTRO INMETRO -->
+          <div class="form-group col-md-2">
+            <label for="dataRegistroInmetro">Data de Registro Inmetro: </label>
+            <input
+              type="date"
+              id="dataRegistroInmetro"
+              name="dataRegistroInmetro"
+              class="form-control"
+              [(ngModel)]="equipamento.dataRegistroInmetro"
+              #dataRegistroInmetro="ngModel"
+              [class.is-invalid]="dataRegistroInmetro.invalid && dataRegistroInmetro.touched"
+            />
+            <span class="invalid-feedback" *ngIf="dataRegistroInmetro.invalid && dataRegistroInmetro.touched">
+              Data de Registro Inmetro é invalido
+            </span>
+          </div>
+
+        <!-- INTEGRADOR -->
+        <div class="form-group col-md-4">
+          <label for="integrador">Integrador: </label>
+          <ng-select
+            name="integrador"
+            id="integrador"
+            class="form-control"
+            required
+            [items]="integradores"
+            bindLabel="nome"
+            bindValue="id"
+            [searchable]="true"
+            [clearable]="true"
+            notFoundText="Nenhum Integrador Encontrado"
+            [(ngModel)]="equipamento.integradorId"
+            #integrador="ngModel"
+            [placeholder]="integrador.value ? '' : 'Selecione o integrador...'"
+            [class.is-invalid]="integrador.invalid && integrador.touched"
+          >
+          </ng-select>
+          <span class="invalid-feedback" *ngIf="integrador.errors?.required && integrador.touched">
+            Integrador do equipamento é obrigradório
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Estado UF -->
+        <div class="form-group col-md-1">
+          <label for="estado">Estado: </label>
+          <ng-select
+            name="estado"
+            id="estado"
+            [items]="UFS"
+            [(ngModel)]="estadoSelecionado"
+            #estado="ngModel"
+            bindLabel="sigla"
+            bindValue="sigla"
+            [searchable]="true"
+            [clearable]="true"
+            notFoundText="Nenhum Estado Encontrado"
+            [placeholder]="estadoSelecionado ? '' : 'uf...'"
+            [class.is-invalid]="estado.invalid && estado.touched"
+          >
+          </ng-select>
+          <span class="invalid-feedback" *ngIf="estado.errors?.required && estado.touched">
+            Estado do equipamento é invalido
+          </span>
+        </div>
+
+        <!-- MUNICIPIO CIDADE -->
+        <div class="form-group col-md-5">
+          <label for="municipio">Municipio: </label>
+          <ng-select
+            name="municipio"
+            id="municipio"
+            [items]="municipiosExibidos"
+            bindLabel="descricao"
+            bindValue="id"
+            [searchable]="true"
+            [clearable]="true"
+            notFoundText="Nenhum Municipio Encontrado"
+            [(ngModel)]="equipamento.municipioId"
+            #municipio="ngModel"
+            [class.is-invalid]="municipio.invalid && municipio.touched"
+            [placeholder]="municipio.value ? '' : 'Selecione o municipio...'"
+            required
+          >
+          </ng-select>
+          <span class="invalid-feedback" *ngIf="municipio.errors?.required && municipio.touched">
+            Municipio do equipamento é obrigradório
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer d-flex flex-row justify-content-between">
+      <button type="submit" class="btn btn-orangeModify" [disabled]="equipamentoForm.invalid">Salvar</button>
+      <button type="button" class="btn btn-delete" *ngIf="equipamento.id" (click)="deleteEq(equipamento)">Deletar</button>
+    </div>
+  </div>
+</form>
+
+<br />
+<!-- {{ equipamento | json }} -->

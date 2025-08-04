@@ -1,0 +1,110 @@
+<div class="row">
+  <form
+    #formFilter="ngForm"
+    method="get"
+    class="col-md-3"
+    (change)="onFilterChange()"
+  >
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Filtrar fluxos:</h5>
+      </div>
+      <div class="card-body">
+        <!-- Intervalo de datas, inicio e fim -->
+        <div class="text-muted text-center mb-2">Intervalo de datas:</div>
+        <div class="row form-group">
+          <div class="col-md-6">
+            <label for="dataInicio">Data de inicio:</label>
+            <input
+              type="date"
+              name="dataInicio"
+              id="dataInicio"
+              class="form-control"
+              [(ngModel)]="dataInicio"
+              #dataInicioModel="ngModel"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="dataFim">Data de fim:</label>
+            <input
+              type="date"
+              name="dataFim"
+              id="dataFim"
+              class="form-control"
+              [(ngModel)]="dataFim"
+              #dataFimModel="ngModel"
+            />
+          </div>
+        </div>
+
+        <!-- Intervalo de horas -->
+        <div class="text-muted text-center mt-2">Intervalo de horas:</div>
+        <div class="row form-group">
+          <div class="col-md">
+            <label for="horaInicio">Hora de inicio:</label>
+            <input
+              type="time"
+              name="horaInicio"
+              id="horaInicio"
+              class="form-control"
+              [(ngModel)]="horaInicio"
+              #horaInicioModel="ngModel"
+            />
+          </div>
+          <div class="col-md">
+            <label for="horaFim">Hora de fim:</label>
+            <input
+              type="time"
+              name="horaFim"
+              id="horaFim"
+              class="form-control"
+              [(ngModel)]="horaFim"
+              #horaFimModel="ngModel"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex flex-row justify-content-between">
+          <button type="button" class="btn btn-secondary" (click)="clearFilters()">
+            Limpar filtros
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="col-md">
+    <table class="table">
+      <thead class="thead h5">
+        <tr>
+          <th scope="col">Equipamentos</th>
+          <th scope="col">Fluxos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let equipamento of equipamentos; let i = index">
+          <td [ngClass]="i % 2 == 0 ? 'bg' : ''">
+            <a
+              class="link"
+              [routerLink]="['/home/equipamentos', equipamento.id]"
+            >
+              <span class="text-muted">Marca:</span> {{ equipamento.marca }} -
+              <span class="text-muted">Modelo:</span> {{ equipamento.modelo }} -
+              <span class="text-muted">Código:</span> {{ equipamento.codigo }}
+            </a>
+          </td>
+          <td [ngClass]="i % 2 == 0 ? 'bg' : ''">
+            <a
+              class="link"
+              [routerLink]="['/home/fluxos']"
+              [queryParams]="{ codigo: equipamento.codigo }"
+            >
+              {{ equipamento.countFluxos || 0 }}
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
