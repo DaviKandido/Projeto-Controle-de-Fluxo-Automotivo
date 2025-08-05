@@ -4,7 +4,7 @@ import { Equipamento } from '../models/equipamento.model';
 import { EquipamentoService } from './equipamento.service';
 import { Observable, of } from 'rxjs';
 import { catchError } from "rxjs/operators";
-
+import { ErrorBack } from '../models/errorBack.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class EquipamentoListResolverServiceService  implements Resolve<Equipamen
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Equipamento[] |string > {
       return this._equipamentoService.getEquipamentos().pipe(
-        catchError((err: string) => of('Problema ao carregar os equipamentos: ' + err))
+        catchError((err: ErrorBack) => of('Problema ao carregar os equipamentos: '+ err?.message))
       )
   }
 }

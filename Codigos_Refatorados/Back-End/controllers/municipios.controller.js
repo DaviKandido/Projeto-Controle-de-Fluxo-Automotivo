@@ -1,6 +1,7 @@
 const models = require("../models");
 const Validator = require("fastest-validator");
 const router = require("express").Router();
+const checkAuthMiddleware = require("../middleware/check-auth");
 
 router.get("/", async (req, res) => {
   
@@ -47,7 +48,7 @@ router.get("/:id", async (req, res) => {
     });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkAuthMiddleware.checkAuth, async (req, res) => {
   
   const municipio = {
     codigo: req.body.codigo,
@@ -122,7 +123,7 @@ router.post("/", async (req, res) => {
   });
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
   
   const id = req.params.id;
   const municipioUpdate = {
@@ -201,7 +202,7 @@ router.put("/:id", async (req, res) => {
     });
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
   const id = req.params.id;
 
   models.Municipio.destroy({

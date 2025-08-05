@@ -1,8 +1,9 @@
 const models = require("../models");
 const { Op } = require("sequelize");
 const router = require("express").Router();
+const checkAuthMiddleware = require("../middleware/check-auth");
 
-router.get("/", async (req, res) => {
+router.get("/", checkAuthMiddleware.checkAuth, async (req, res) => {
   // Extrai e converte o limit, se existir
   const limit = req.query.limit ? parseInt(req.query.limit) : null;
   delete req.query.limit;
@@ -64,7 +65,7 @@ router.get("/", async (req, res) => {
     });
 });
 
-router.get("/:id",  async (req, res) => {
+router.get("/:id", checkAuthMiddleware.checkAuth,  async (req, res) => {
   const id = req.params.id;
   models.Fluxo.findByPk(id)
     .then((result) => {
@@ -85,7 +86,7 @@ router.get("/:id",  async (req, res) => {
 });
 
 
-router.get("/count/:id_equipamento", async (req, res) => {
+router.get("/count/:id_equipamento", checkAuthMiddleware.checkAuth, async (req, res) => {
 
   // Select count(f.id) from fluxo f
   // Join Equipamento E ON E.id = f.equipamentoId and f.data > '2025-01-01' and f.data < '2025-08-08'
@@ -147,7 +148,7 @@ router.get("/count/:id_equipamento", async (req, res) => {
 // function save(req, res) { }
 // async function update(req, res) { }
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuthMiddleware.checkAuth,  async (req, res) => {
   const id = req.params.id;
 
   models.Fluxo.destroy({

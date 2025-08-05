@@ -1,6 +1,7 @@
 const models = require("../models");
 const Validator = require("fastest-validator");
 const router = require("express").Router();
+const checkAuthMiddleware = require("../middleware/check-auth");
 
 router.get("/", async (req, res) => {
   models.Integrador.findAll()
@@ -36,7 +37,7 @@ router.get("/:id", async (req, res) => {
     });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkAuthMiddleware.checkAuth, async (req, res) => {
   const integrador = {
     nome: req.body.nome,
   };
@@ -72,7 +73,7 @@ router.post("/", async (req, res) => {
   });
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
   const id = req.params.id;
   const updatedIntegrador = {
     nome: req.body.nome,
@@ -114,7 +115,7 @@ router.put("/:id", async (req, res) => {
     });
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
   const id = req.params.id;
 
   models.Integrador.destroy({

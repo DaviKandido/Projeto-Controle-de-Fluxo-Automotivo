@@ -10,14 +10,14 @@
 
 // module.exports = router;
 
-const express = require();
-const router = express.router();
-const checkAuthMiddleware = require("../middleware/check-auth");
+const express = require('express');
+const router = express.Router();
 
-router.use("/usuarios", checkAuthMiddleware.checkAuth, require("./usuarios.controller"));
-router.use("/integradores", checkAuthMiddleware.checkAuth, require("./integradores.controller"));
-router.use("/municipios", checkAuthMiddleware.checkAuth, require("./municipios.controller"));
-router.use("/equipamentos", checkAuthMiddleware.checkAuth, require("./equipamentos.controller"));
-router.use("/fluxos", checkAuthMiddleware.checkAuth, require("./fluxos.controller"));
+
+router.use("/usuarios", require("./usuarios.controller"));
+router.use("/integradores", require("./integradores.controller"));
+router.use("/municipios", require("./municipios.controller"));
+router.use("/equipamentos", require("./equipamentos.controller"));
+router.use("/fluxos", require("./fluxos.controller"));
 
 module.exports = router;

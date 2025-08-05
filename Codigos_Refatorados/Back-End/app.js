@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -13,24 +13,16 @@ app.use(
   })
 );
 
-
 app.use((req, res, next) => {
-  console.log(
-    `${new Date().toLocaleString()} | Requisição: ${req.method} ${req.url}`
-  );
+  console.log(`${new Date().toLocaleString()} | Requisição: ${req.method} ${req.url}`);
   next();
 });
 
-
-const RouterController = require('./controllers')
+const RouterController = require("./controllers");
 app.use("/", RouterController);
 
-
-
-const swaggerRouter = require("./routers/swagger");
+const swaggerRouter = require("./docs/swagger");
 app.use("/api-docs", swaggerRouter);
-
-
 
 app.get("/", (req, res) => {
   res.send("API - Sistema de Controle de Fluxos Veiculares");
@@ -38,10 +30,9 @@ app.get("/", (req, res) => {
 
 app.use((req, res) => {
   res.status(404).json({
-      message: "Rota não encontrada"
+    message: "Rota não encontrada",
   });
 });
-
 
 module.exports = app;
 
