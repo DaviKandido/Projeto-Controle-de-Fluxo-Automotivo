@@ -2,25 +2,25 @@ const models = require("../models");
 const Validator = require("fastest-validator");
 const router = require("express").Router();
 const checkAuthMiddleware = require("../middleware/check-auth");
+const MunicipioService = require("../services/municipio.service");
+const municipioService = new MunicipioService();
 
 router.get("/", async (req, res) => {
-  
-  whereMunicipios = {};
-  if (req.query.uf) whereMunicipios.uf = req.query.uf.toUpperCase();
+  try {
+    const municipios = await municipioService.findAll(req.query);
 
-  models.Municipio.findAll({
-    where: { ...whereMunicipios },
-    order: [["descricao", "ASC"]],
-  })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível obter os municipios",
-        error: err,
+    if (!municipios || municipios.length == 0)
+      return res.status(404).json({
+        message: "Nenhum municipio encontrado",
       });
+
+    return res.status(200).json(municipios);
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível obter os municipios",
+      error: err.message,
     });
+  }
 });
 
 // function gerarQuery(req) {
@@ -29,198 +29,137 @@ router.get("/", async (req, res) => {
 // }
 
 router.get("/:id", async (req, res) => {
-  const id = req.params.id;
-  models.Municipio.findByPk(id)
-    .then((result) => {
-      if (result) {
-        res.status(200).json(result);
-      } else {
-        res.status(404).json({
-          message: "Municipio não encontrado",
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível obter o municipio",
-        error: err,
+  try {
+    const municipio = await municipioService.findByPK(req.params.id);
+
+    if (!municipio) {
+      res.status(404).json({
+        message: "Municipio não encontrado",
       });
+    }
+
+    return res.status(200).json(municipio);
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível obter o municipio",
+      error: err.message,
     });
+  }
 });
 
 router.post("/", checkAuthMiddleware.checkAuth, async (req, res) => {
-  
-  const municipio = {
-    codigo: req.body.codigo,
-    descricao: req.body.descricao,
-    uf: req.body.uf,
-  };
+  try {
+    const municipio = {
+      codigo: req.body.codigo,
+      descricao: req.body.descricao,
+      uf: req.body.uf,
+    };
 
-  const schema = {
-    codigo: { type: "number", optional: false },
-    descricao: { type: "string", optional: false, max: "255" },
-    uf: {
-      type: "enum",
-      values: [
-        "AC",
-        "AL",
-        "AP",
-        "AM",
-        "BA",
-        "CE",
-        "DF",
-        "ES",
-        "GO",
-        "MA",
-        "MT",
-        "MS",
-        "MG",
-        "PA",
-        "PB",
-        "PR",
-        "PE",
-        "PI",
-        "RJ",
-        "RN",
-        "RS",
-        "RO",
-        "RR",
-        "SC",
-        "SP",
-        "SE",
-        "TO",
-      ],
-      optional: false,
-    },
-  };
+    const validationResponse = municipioService.validaSchema(municipio);
+    if (validationResponse !== true) {
+      return res.status(400).json({
+        message: "falha na validação!",
+        errors: validationResponse,
+      });
+    }
 
-  const v = new Validator();
-  const validationResponse = v.validate(municipio, schema);
+    const municipioExiste = await municipioService.findOne(municipio);
+    if (municipioExiste) {
+      return res.status(409).json({
+        message: "Já existe um municipio com esse código, tente outro",
+      });
+    }
 
-  if (validationResponse !== true) {
-    return res.status(400).json({
-      message: "falha na validação!",
-      errors: validationResponse,
+    const municipioCreated = await municipioService.create(municipio);
+
+    if (!municipioCreated) {
+      return res.status(500).json({
+        message: "Não foi possível incluir o municipio",
+      });
+    }
+
+    res.status(201).json({
+      message: "Municipio criado com sucesso",
+      municipio: municipioCreated,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível incluir o municipio",
+      error: err.message,
     });
   }
-
-  models.Municipio.create(municipio).then((result) => {
-    res
-      .status(201)
-      .json({
-        message: "Municipio criado com sucesso",
-        municipio: {
-          id: result.id,
-          ...municipio,
-        },
-      })
-      .catch((err) => {
-        res.status(500).json({
-          message: "Não foi possível incluir o municipio",
-          error: err,
-        });
-      });
-  });
 });
 
 router.put("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
-  
-  const id = req.params.id;
-  const municipioUpdate = {
-    codigo: req.body.codigo,
-    descricao: req.body.descricao,
-    uf: req.body.uf,
-  };
+  try {
+    const id = req.params.id;
 
-  const schema = {
-    codigo: { type: "number", optional: false },
-    descricao: { type: "string", optional: false, max: "255" },
-    uf: {
-      type: "enum",
-      values: [
-        "AC",
-        "AL",
-        "AP",
-        "AM",
-        "BA",
-        "CE",
-        "DF",
-        "ES",
-        "GO",
-        "MA",
-        "MT",
-        "MS",
-        "MG",
-        "PA",
-        "PB",
-        "PR",
-        "PE",
-        "PI",
-        "RJ",
-        "RN",
-        "RS",
-        "RO",
-        "RR",
-        "SC",
-        "SP",
-        "SE",
-        "TO",
-      ],
-      optional: false,
-    },
-  };
+    const municipioUpdate = {
+      codigo: req.body.codigo,
+      descricao: req.body.descricao,
+      uf: req.body.uf,
+    };
 
-  const v = new Validator();
-  const validationResponse = v.validate(municipioUpdate, schema);
+    const validationResponse = municipioService.validaSchema(municipioUpdate);
+    if (validationResponse !== true) {
+      return res.status(400).json({
+        message: "falha na validação!",
+        errors: validationResponse,
+      });
+    }
 
-  if (validationResponse !== true) {
-    return res.status(400).json({
-      message: "falha na validação!",
-      errors: validationResponse,
+    const municipio = await municipioService.findByPK(id);
+
+    const newMunicipio = {
+      ...municipio,
+      ...municipioUpdate,
+    };
+
+    const municipioUpdated = await municipioService.update(id, newMunicipio);
+
+    if (!municipioUpdated) {
+      return res.status(500).json({
+        message: "Não foi possível atualizar o municipio",
+      });
+    }
+
+    res.status(200).json({
+      message: "Municipio atualizado com sucesso",
+      municipio: municipioUpdated,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível atualizar o municipio",
+      error: err.message,
     });
   }
-
-  models.Municipio.update(municipioUpdate, {
-    where: {
-      id: id,
-    },
-  })
-    .then((result) => {
-      res.status(200).json({
-        message: "Municipio atualizado com sucesso",
-        municipio: {
-          id: id,
-          ...municipioUpdate,
-        },
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível atualizar o municipio",
-        error: err,
-      });
-    });
 });
 
 router.delete("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  models.Municipio.destroy({
-    where: {
-      id: id,
-    },
-  })
-    .then((result) => {
+    const municipio = await municipioService.findByPK(id);
+
+    if (!municipio) {
+      return res.status(404).json({
+        message: "Municipio não encontrado",
+      });
+    }
+
+    const deleted = await municipioService.delete(id);
+
+    if (deleted) {
       res.status(200).json({
         message: "Municipio removido com sucesso",
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível remover o municipio",
-        error: err,
-      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível remover o municipio",
+      error: err.message,
     });
+  }
 });
 
 module.exports = router;

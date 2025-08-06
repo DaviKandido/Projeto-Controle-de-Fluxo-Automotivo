@@ -1,6 +1,3 @@
-const models = require("../models");
-const Validator = require("fastest-validator");
-const bcryptJS = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = require("express").Router();
 const checkAuthMiddleware = require("../middleware/check-auth");

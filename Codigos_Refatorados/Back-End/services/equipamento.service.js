@@ -1,6 +1,4 @@
-const { where } = require("sequelize");
 const model = require("../models");
-const bcryptJS = require("bcryptjs");
 const Validator = require("fastest-validator");
 
 class Equipamento {
@@ -32,7 +30,7 @@ class Equipamento {
     return this.v.validate(data, schema);
   }
 
-  async createQueryEquipamento(query) {
+  async createQueryEquipamento(query = {}) {
     let whereEquipamento = {};
     if (query.codigo !== undefined) whereEquipamento.codigo = query.codigo;
     if (query.faixa !== undefined) whereEquipamento.faixa = query.faixa;
@@ -43,7 +41,7 @@ class Equipamento {
     return whereEquipamento;
   }
 
-  async createQueryFluxo(query) {
+  async createQueryFluxo(query = {}) {
     let whereFluxos = {};
     if (query.placa !== undefined) whereFluxos.placa = query.placa;
 
@@ -69,7 +67,7 @@ class Equipamento {
     return whereFluxos;
   }
 
-  async findAll(query) {
+  async findAll(query = {limit: 0}) {
     // Extrai e converte o limit, se existir
     const limit = query.limit ? parseInt(query.limit) : null;
     delete query.limit;

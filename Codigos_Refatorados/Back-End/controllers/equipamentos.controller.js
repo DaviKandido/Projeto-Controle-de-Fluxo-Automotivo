@@ -1,11 +1,8 @@
 const models = require("../models");
-const Validator = require("fastest-validator");
-const { Op } = require("sequelize");
 const moment = require("moment");
 const router = require("express").Router();
 const checkAuthMiddleware = require("../middleware/check-auth");
 const EquipamentoService = require("../services/equipamento.service");
-const usuario = require("../models/usuario");
 const equipamentoService = new EquipamentoService();
 
 router.get("/", async (req, res) => {
@@ -76,14 +73,15 @@ router.post("/", checkAuthMiddleware.checkAuth, async (req, res) => {
       municipioId: req.body.municipioId,
     };
 
-    if (equipamentoService.validaSchema(equipamento) !== true) {
+    const validationResponse = equipamentoService.validaSchema(equipamento);
+    if (validationResponse !== true) {
       return res.status(400).json({
         message: "falha na validação!",
         errors: validationResponse,
       });
     }
-    const equipamentoCriado = await equipamentoService.create(equipamento);
 
+    const equipamentoCriado = await equipamentoService.create(equipamento);
     if (!equipamentoCriado) {
       return res.status(500).json({
         message: "Não foi possível criar o equipamento",
@@ -128,7 +126,8 @@ router.put("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
       municipioId: req.body.municipioId,
     };
 
-    if (equipamentoService.validaSchema(equipamentoUpdate) !== true) {
+    const validationResponse = equipamentoService.validaSchema(equipamento);
+    if (validationResponse !== true) {
       return res.status(400).json({
         message: "falha na validação!",
         errors: validationResponse,

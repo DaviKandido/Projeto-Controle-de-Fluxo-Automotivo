@@ -3,170 +3,92 @@ const { Op } = require("sequelize");
 const router = require("express").Router();
 const checkAuthMiddleware = require("../middleware/check-auth");
 
+const FluxoService = require("../services/fluxo.service");
+const fluxoService = new FluxoService();
+
 router.get("/", checkAuthMiddleware.checkAuth, async (req, res) => {
-  // Extrai e converte o limit, se existir
-  const limit = req.query.limit ? parseInt(req.query.limit) : null;
-  delete req.query.limit;
+  try {
+    const fluxos = await fluxoService.findAll(req.query);
 
-  const whereEquipamento = {};
-  if (req.query.CodEquipamento !== undefined)
-    whereEquipamento.codigo = req.query.CodEquipamento;
-  if (req.query.faixaEquipamento !== undefined)
-    whereEquipamento.faixa = req.query.faixaEquipamento;
-
-  const whereFluxos = {};
-  if (req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
-
-  if (req.query.dataInicio !== undefined || req.query.dataFim !== undefined) {
-    whereFluxos.data = {};
-    if (req.query.dataInicio !== undefined) {
-      whereFluxos.data[Op.gte] = req.query.dataInicio;
-    }
-    if (req.query.dataFim !== undefined) {
-      whereFluxos.data[Op.lte] = req.query.dataFim;
-    }
-  }
-
-  if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
-    whereFluxos.hora = {};
-    if (req.query.horaInicio !== undefined) {
-      whereFluxos.hora[Op.gte] = req.query.horaInicio;
-    }
-    if (req.query.horaFim !== undefined) {
-      whereFluxos.hora[Op.lte] = req.query.horaFim;
-    }
-  }
-
-  models.Fluxo.findAll({
-    limit: limit,
-    order: [["data", "DESC"], ["hora", "DESC"]],
-    where: { ...whereFluxos },
-    include: [
-      {
-        model: models.Equipamento,
-        where: whereEquipamento,
-      },
-    ],
-  })
-    .then((result) => {
-      if (!result) {
-        res.status(404).json({
-          message: "Fluxos não encontrados",
-        });
-      }
-
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível obter os fluxos solicitados",
-        error: err,
+    if (!fluxos || fluxos.length == 0)
+      return res.status(404).json({
+        message: "Nenhum fluxo encontrado",
       });
+
+    res.status(200).json(fluxos);
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível obter os fluxos solicitados",
+      error: err,
     });
+  }
 });
 
-router.get("/:id", checkAuthMiddleware.checkAuth,  async (req, res) => {
-  const id = req.params.id;
-  models.Fluxo.findByPk(id)
-    .then((result) => {
-      if (result) {
-        res.status(200).json(result);
-      } else {
-        res.status(404).json({
-          message: "Fluxo não encontrado",
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível obter o fluxo solicitado",
-        error: err,
-      });
-    });
-});
+router.get("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
+  try {
+    const fluxo = await fluxoService.findByPk(req.params.id);
 
+    if (!fluxo) {
+      return res.status(404).json({
+        message: "Fluxo não encontrado",
+      });
+    }
+
+    res.status(200).json(fluxo);
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível obter o fluxo solicitado",
+      error: err.message,
+    });
+  }
+});
 
 router.get("/count/:id_equipamento", checkAuthMiddleware.checkAuth, async (req, res) => {
+  try {
+    const countFluxos = await fluxoService.cont(req.query, req.params.id_equipamento);
 
-  // Select count(f.id) from fluxo f
-  // Join Equipamento E ON E.id = f.equipamentoId and f.data > '2025-01-01' and f.data < '2025-08-08'
-
-  const id_equipamento = req.params.id_equipamento;
-
-  const whereFluxos = {};
-  if (req.query.placa !== undefined) whereFluxos.placa = req.query.placa;
-
-  if (req.query.dataInicio !== undefined || req.query.dataFim !== undefined) {
-    whereFluxos.data = {};
-    if (req.query.dataInicio !== undefined) {
-      whereFluxos.data[Op.gte] = req.query.dataInicio;
-    }
-    if (req.query.dataFim !== undefined) {
-      whereFluxos.data[Op.lte] = req.query.dataFim;
-    }
-  }
-
-  if (req.query.horaInicio !== undefined || req.query.horaFim !== undefined) {
-    whereFluxos.hora = {};
-    if (req.query.horaInicio !== undefined) {
-      whereFluxos.hora[Op.gte] = req.query.horaInicio;
-    }
-    if (req.query.horaFim !== undefined) {
-      whereFluxos.hora[Op.lte] = req.query.horaFim;
-    }
-  }
-
-
-  models.Fluxo.count({
-    where: { ...whereFluxos },
-    include: [
-      {
-        model: models.Equipamento,
-        where: { id: id_equipamento },
-      },
-    ]
-  })
-    .then((result) => {
-      if (typeof result === "number") {
-        res.status(200).json(result);
-      } else {
-        res.status(404).json({
-          message: "Fluxos por equipamento não encontrado",
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível obter a contagem de fluxos por equipamento",
-        error: err,
+    if (typeof countFluxos === "number") {
+      res.status(200).json(countFluxos);
+    } else {
+      res.status(404).json({
+        message: "Fluxos por equipamento não encontrado",
       });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível obter a contagem de fluxos por equipamento",
+      error: err.message,
     });
+  }
 });
-
 
 // Fluxo virão de um equipamento externo
 // function save(req, res) { }
 // async function update(req, res) { }
 
-router.delete("/:id", checkAuthMiddleware.checkAuth,  async (req, res) => {
-  const id = req.params.id;
+router.delete("/:id", checkAuthMiddleware.checkAuth, async (req, res) => {
+  try {
+    const id = req.params.id;
 
-  models.Fluxo.destroy({
-    where: {
-      id: id,
-    },
-  })
-    .then((result) => {
-      res.status(200).json({
-        message: "Fluxo removido com sucesso",
+    const fluxo = await models.Fluxo.findByPk(id);
+
+    if (!fluxo) {
+      return res.status(404).json({
+        message: "Fluxo não encontrado",
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Não foi possível remover o Fluxo",
-        error: err,
-      });
+    }
+
+    const deleted = await fluxo.destroy(req.params.id);
+
+    deleted
+      ? res.status(200).json({ message: "Fluxo removido com sucesso" })
+      : res.status(500).json({ message: "Não foi possível remover o Fluxo" });
+  } catch (err) {
+    res.status(500).json({
+      message: "Não foi possível remover o Fluxo",
+      error: err.message,
     });
+  }
 });
 
 module.exports = router;
